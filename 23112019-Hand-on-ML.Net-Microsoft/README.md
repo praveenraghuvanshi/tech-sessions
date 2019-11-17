@@ -1,6 +1,6 @@
 # Welcome to Hands-on Workshop on ML.Net
 
-![ML.Net](.\assets\ML_Net_logo.png)
+![ML.Net](https://raw.githubusercontent.com/praveenraghuvanshi1512/TechnicalSessions/16112019-Hands-On-ML.Net-Microsoft/23112019-Hand-on-ML.Net-Microsoft/assets/ML_Net_logo.png)
 
 
 
