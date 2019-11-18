@@ -27,9 +27,9 @@ Microsoft Prestige Ferns Galaxy, 6/18, Bellandur Gate Road, Bellandur, Bengaluru
 
 - [Preferred] : Azure subscription. Choose one of the below
 
-  - New : 12 Months free services [Link](https://azure.microsoft.com/en-in/free/)
-  - Try Azure Functions : Limited to 59 mins usage, No credit card required [Link](https://tryfunctions.com/ng-min/try?trial=true) Usage: [Link](https://theflyingmaverick.com/2018/02/07/try-azure-functions-for-free/)
-  - Try App service: [Link](https://tryappservice.azure.com/)
+  - [New](https://azure.microsoft.com/en-in/free/) : 12 Months free services
+  - [Try Azure Functions](https://tryfunctions.com/ng-min/try?trial=true) : Limited to 59 mins usage, No credit card required. [Usage](https://theflyingmaverick.com/2018/02/07/try-azure-functions-for-free/)
+  - [Try App service](https://tryappservice.azure.com/)
 
 - [Optional] VS Code C# Extensions : [Download](https://marketplace.visualstudio.com/items?itemName=jchannon.csharpextensions)
 
