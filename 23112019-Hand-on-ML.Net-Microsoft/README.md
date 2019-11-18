@@ -4,7 +4,7 @@
 
 
 
-**Meetup:** Hands-on workshop on ML.Net ( https://www.meetup.com/Microsoft-Azure-Bangalore/events/263909804/ )
+**Meetup:** Hands-on workshop on ML.Net (https://www.meetup.com/Microsoft-Azure-Bangalore/events/263909804/)
 
 **Date** : Saturday, 23rd November 2019            
 
@@ -23,7 +23,7 @@ Microsoft Prestige Ferns Galaxy, 6/18, Bellandur Gate Road, Bellandur, Bengaluru
 
 - ML.Net CLI : [Instructions](https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/install-ml-net-cli)
 
-- Model Builder: [Download](https://marketplace.visualstudio.com/items?itemName=MLNET.07)
+- Model Builder: Works only with Visual Studio on Windows [Download](https://marketplace.visualstudio.com/items?itemName=MLNET.07)
 
 - [Preferred] : Azure subscription. Choose one of the below
 
@@ -33,3 +33,11 @@ Microsoft Prestige Ferns Galaxy, 6/18, Bellandur Gate Road, Bellandur, Bengaluru
 
 - [Optional] VS Code C# Extensions : [Download](https://marketplace.visualstudio.com/items?itemName=jchannon.csharpextensions)
 
+
+
+#### Validation
+
+Execute below command in command prompt(cmd) just to ensure required software is installed. Ensure command not found error is not reported. For any issue, try re-installing the appropriate 
+
+- dotnet --version
+- mlnet --version
