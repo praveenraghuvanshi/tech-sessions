@@ -40,4 +40,19 @@ Microsoft Prestige Ferns Galaxy, 6/18, Bellandur Gate Road, Bellandur, Bengaluru
 Execute below command in command prompt(cmd) just to ensure required software is installed. Ensure command not found error is not reported. For any issue, try re-installing the appropriate 
 
 - dotnet --version
+
 - mlnet --version
+
+  
+
+#### Resources
+
+- [Slides](ML_Net_Praveen_Raghuvanshi_23_Nov_2019.pptx)
+
+- Target Problems
+
+  - [Classification(Binary)](./src/Classification(Binary)/README.md) - Predict survival of Titanic Passenger
+  - Regression - Predict taxi-fare 
+  - Image Classification - Photo Search
+
+  
