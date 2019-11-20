@@ -48,11 +48,8 @@ Execute below command in command prompt(cmd) just to ensure required software is
 #### Resources
 
 - [Slides](ML_Net_Praveen_Raghuvanshi_23_Nov_2019.pptx)
-
 - Target Problems
-
   - [Classification(Binary)](./src/Classification(Binary)/README.md) - Predict survival of Titanic Passenger
   - Regression - Predict taxi-fare 
   - Image Classification - Photo Search
 
-  
