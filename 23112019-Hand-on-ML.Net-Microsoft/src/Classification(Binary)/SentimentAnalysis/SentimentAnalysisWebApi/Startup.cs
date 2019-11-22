@@ -29,9 +29,18 @@ namespace SentimentAnalysisWebApi
         {
             services.AddControllers();
 
-            services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+            // LOCAL Deployment
+            /*services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
     .FromFile(modelName: "SentimentAnalysisModel", filePath:"MLModels/SentimentAnalysisModel.zip", watchForChanges: true);
+    */
+            // CLOUD Deployment
+            services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+            .FromUri(
+                modelName: "SentimentAnalysisModel",
+                uri:"https://techsessionsstorage.blob.core.windows.net/models/SentimentAnalysisModel.zip",
+                period: TimeSpan.FromMinutes(1));
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

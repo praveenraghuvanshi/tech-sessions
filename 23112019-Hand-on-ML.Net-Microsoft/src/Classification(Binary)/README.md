@@ -451,7 +451,7 @@ F1Score: 84.04%
 
 - Now, open any REST client, I have used Postman
 
-- Make a POST with sentiment text in body as shown below
+- Make a POST call with sentiment text in body as shown below
 
   ```
   POST https://localhost:5001/api/predict
@@ -468,11 +468,26 @@ F1Score: 84.04%
 
 ## Deploying Model to Azure
 
-
+### Web App/API App
 
 ### Steps
 
 ##### Step 1: Publish the app
+
+- Upload Model(SentimentalAnalysisModel.zip) file to some remote location such as github/azure blob.
+
+- We pushed it to Azure blob with public access [Azure Blobl Model]( https://techsessionsstorage.blob.core.windows.net/models/SentimentAnalysisModel.zip)
+
+- In Startup.cs, change AddPredictionEnginePool(...) code with below code
+
+  ```c#
+  services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+    .FromUri(
+        modelName: "SentimentAnalysisModel",
+        uri:"https://techsessionsstorage.blob.core.windows.net/models/SentimentAnalysisModel.zip",
+        period: TimeSpan.FromMinutes(1));
+          }
+  ```
 
 - Publish app 
 
@@ -480,35 +495,36 @@ F1Score: 84.04%
   dotnet publish -c Release -o ./publish
   ```
 
-  
-
 -  A new Publish directory will be created
 
-- 
+- For VS code [Install the Azure App Service extension](vscode:extension/ms-azuretools.vscode-azureappservice)  or login to azure portal
 
-##### Step 1: Create a web app
+- Right click on 'Publish' directory and select 'Deploy to web app'
 
-- [Install the Azure App Service extension](vscode:extension/ms-azuretools.vscode-azureappservice)  or login to azure portal
+- Create a web app and deploy
 
-- Create a web app
+##### Step 2: Test
 
-  - Name: SentimentAnalysisWebApp
+- Now, open any REST client, I have used Postman
 
-  - OS : Windows
+- Make a POST call with sentiment text in body as shown below
 
-    
+  ```
+  POST https://mlnet.azurewebsites.net/api/predict
+  Body: {
+  	"SentimentText": "This was a very bad steak"
+  }
+  ```
 
-- 
+  
 
-- Create a web app
+- Response must be 'Negative'
 
-  - Name: SentimentAnalysisWebApp
+### Azure Functions - Serverless
 
-  - OS : Windows
+References:
 
-    
-
-
+ http://luisquintanilla.me/2018/08/21/serverless-machine-learning-mlnet-azure-functions/ 
 
 
 
