@@ -29,5 +29,11 @@ namespace SentimentAnalysisWebApi.Controllers
 
             return Ok(sentiment);
         }
+
+        [HttpGet]
+        public string Get()
+        {
+            return "Dummy record";
+        }
     }
 }

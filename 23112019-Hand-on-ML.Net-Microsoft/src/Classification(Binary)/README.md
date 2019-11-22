@@ -466,5 +466,55 @@ F1Score: 84.04%
 
 
 
+## Deploying Model to Azure
+
+
+
+### Steps
+
+##### Step 1: Publish the app
+
+- Publish app 
+
+  ```c#
+  dotnet publish -c Release -o ./publish
+  ```
+
+  
+
+-  A new Publish directory will be created
+
+- 
+
+##### Step 1: Create a web app
+
+- [Install the Azure App Service extension](vscode:extension/ms-azuretools.vscode-azureappservice)  or login to azure portal
+
+- Create a web app
+
+  - Name: SentimentAnalysisWebApp
+
+  - OS : Windows
+
+    
+
+- 
+
+- Create a web app
+
+  - Name: SentimentAnalysisWebApp
+
+  - OS : Windows
+
+    
+
+
+
+
+
+
+
+
+
 
 
