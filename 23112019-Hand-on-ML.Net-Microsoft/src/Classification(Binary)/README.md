@@ -526,6 +526,12 @@ References:
 
  http://luisquintanilla.me/2018/08/21/serverless-machine-learning-mlnet-azure-functions/ 
 
+ https://microsoft.github.io/AzureTipsAndTricks/blog/tip174.html 
+
+ https://microsoft.github.io/AzureTipsAndTricks/blog/tip175.html 
+
+
+
 
 
 
