@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentimentAnalysis", "SentimentAnalysis\SentimentAnalysis.csproj", "{C06F57AD-D95F-4D8F-9BC9-3E0E68CFEB8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentimentAnalysisWebApi", "SentimentAnalysisWebApi\SentimentAnalysisWebApi.csproj", "{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{C06F57AD-D95F-4D8F-9BC9-3E0E68CFEB8B}.Release|x64.Build.0 = Release|Any CPU
 		{C06F57AD-D95F-4D8F-9BC9-3E0E68CFEB8B}.Release|x86.ActiveCfg = Release|Any CPU
 		{C06F57AD-D95F-4D8F-9BC9-3E0E68CFEB8B}.Release|x86.Build.0 = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|x64.Build.0 = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|x64.ActiveCfg = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|x64.Build.0 = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B668C2CF-F9E3-46CE-BCD6-33C18BD3823C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

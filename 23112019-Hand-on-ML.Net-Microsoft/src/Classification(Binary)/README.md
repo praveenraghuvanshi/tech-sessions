@@ -251,10 +251,220 @@ F1Score: 84.04%
 
 - Save a model to be used in other applications such as console, Winform, WPF, Asp.Net
 
-- A model.zip file will be generated in the current directory.
+- A SentimentAnalysisModel.zip file will be generated in the current directory.
 
   ```c#
-  mlContext.Model.Save(model, splitDataView.TrainSet.Schema,"model.zip");
+  mlContext.Model.Save(model, splitDataView.TrainSet.Schema,"SentimentAnalysisModel.zip");
+  ```
+
+
+
+
+## Using Model in WebAPI 
+
+[Reference]( https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/serve-model-web-api-ml-net)
+
+### Steps
+
+##### Step 1: Create an Asp.Net core Web API project
+
+- Open Terminal
+
+- Change directory(cd) to directory containing 'SentimentAnalysis.sln' 
+
+- Create a new Asp.Net core WebApi project
+
+  ```c#
+  dotnet new webapi -o SentimentAnalysisWebApi
+  ```
+
+- Go to SentimentAnalysisWebApi directory, and create a new directory 'MLModels' to save pre-built machine learning model files.
+
+  ```
+  cd SentimentAnalysisWebApi
+  mkdir MLModels
   ```
 
   
+
+- Add SentimentAnalysisWebApi.csproj Project to SentimentAnalysis.sln solution
+
+  ```c#
+  dotnet sln ..\SentimentAnalysisDemo.sln add SentimentAnalysisWebApi.csproj
+  ```
+
+  
+
+- Install packages : Microsof.ML and Microsoft.Extensions.ML
+
+  ```c#
+  dotnet add package Microsoft.ML
+  dotnet add package Microsoft.Extensions.ML
+  ```
+
+
+
+##### Step 2: Import Pre-build model
+
+- Copy pre-built model(SentimentAnalysis.zip) to MLModels directory
+
+- Open 'SentimentAnalysisWebApi.csproj' in VSCode and copy below text just before </Project> tag. 'CopyToOutputDirectory' is important as it determines whether to copy SentimentAnalysis.zip to the application executing directory. 'CopyIfNewer' allows copying of file in case there a new version of it. 
+
+  ```
+  <ItemGroup>
+  	<Content Include="MLModels/SentimentAnalysisModel.zip"> 
+      	<CopyToOutputDirectory>CopyIfNewer</CopyToOutputDirectory>
+      </Content>
+  </ItemGroup>
+  ```
+
+  SentimentAnalysisModel.zip is located at ..\SentimentAnalysis\SentimentAnalysis\SentimentAnalysisModel.zip
+
+
+
+##### Step 3: Create Data Models
+
+- We need to create some classes for input data and predictions
+
+- Create a directory 'DataModels' in the project
+
+  ```c#
+  mkdir DataModels
+  cd DataModels
+  ```
+
+- Add a class 'SentimentData.cs' with below code
+
+  ```c#
+  using Microsoft.ML.Data;
+  
+  namespace SentimentAnalysisWebApi.DataModels
+  {
+      public class SentimentData
+      {
+          [LoadColumn(0)]
+          public string SentimentText;
+  
+          [LoadColumn(1)]
+          [ColumnName("Label")]
+          public bool Sentiment;
+      }
+  }
+  ```
+
+  
+
+- Add a class 'SentimentPrediction.cs' with below code
+
+  ```c#
+  using Microsoft.ML.Data;
+  
+  namespace SentimentAnalysisWebApi.DataModels
+  {
+     public class SentimentPrediction : SentimentData
+      {
+  
+          [ColumnName("PredictedLabel")]
+          public bool Prediction { get; set; }
+  
+          public float Probability { get; set; }
+  
+          public float Score { get; set; }
+      }
+  }
+  ```
+
+
+
+##### Step 4: Register PredictionEnginePool
+
+- In earlier console application, we used PredictionEngine to predict a single instance. It might work in a console application with single-threaded environment. However, it's not a thread-safe and might fail in case of a web api.
+
+- In order to have a thread safety and reusability, PredictionEnginePool is introduced.
+
+- Open Startup.cs in project directory and below code to ConfigureServices method
+
+  ```c#
+  using Microsoft.Extensions.ML;
+  using SentimentAnalysisWebApi.DataModels;
+  
+  services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+      .FromFile(modelName: "SentimentAnalysisModel", filePath:"MLModels/SentimentAnalysisModel.zip", watchForChanges: true);
+  ```
+
+  Ensure 'watchForChanges' is true. It allows to get the update model whenever there is a change in it.
+
+
+
+##### Step 5: Add web api's
+
+- Add a file 'PredictController.cs' with below code under controllers directory
+
+  ```c#
+  using System;
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.ML;
+  using SentimentAnalysisWebApi.DataModels;
+  
+  namespace SentimentAnalysisWebApi.Controllers
+  {
+      public class PredictController : ControllerBase
+      {
+          private readonly PredictionEnginePool<SentimentData, SentimentPrediction> _predictionEnginePool;
+  
+          public PredictController(PredictionEnginePool<SentimentData,SentimentPrediction> predictionEnginePool)
+          {
+              _predictionEnginePool = predictionEnginePool;
+          }
+  
+          [HttpPost]
+          public ActionResult<string> Post([FromBody] SentimentData input)
+          {
+              if(!ModelState.IsValid)
+              {
+                  return BadRequest();
+              }
+  
+              SentimentPrediction prediction = _predictionEnginePool.Predict(modelName: "SentimentAnalysisModel", example: input);
+  
+              string sentiment = Convert.ToBoolean(prediction.Prediction) ? "Positive" : "Negative";
+  
+              return Ok(sentiment);
+          }
+      }
+  }
+  ```
+
+
+
+##### Step 6: Test locally
+
+- Run application
+
+  ```
+   dotnet run .\SentimentAnalysisWebApi.csproj
+  ```
+
+- A web server will be started at https://localhost:5001
+
+- Hit https://localhost:5001/weatherforecast in browser just to ensure server is serving requests
+
+- Now, open any REST client, I have used Postman
+
+- Make a POST with sentiment text in body as shown below
+
+  ```
+  POST https://localhost:5001/api/predict
+  Body: {
+  	"SentimentText": "This was a very bad steak"
+  }
+  ```
+
+  
+
+- Response must be 'Negative'
+
+
+
+
+

@@ -66,7 +66,7 @@ namespace SentimentAnalysis
             Console.WriteLine();
 
             // Save Model
-            mlContext.Model.Save(model, splitDataView.TrainSet.Schema,"model.zip");
+            mlContext.Model.Save(model, splitDataView.TrainSet.Schema,"SentimentAnalysisModel.zip");
         }
     }
 }
