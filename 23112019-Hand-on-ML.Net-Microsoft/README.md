@@ -31,6 +31,8 @@ Microsoft Prestige Ferns Galaxy, 6/18, Bellandur Gate Road, Bellandur, Bengaluru
   - [Try Azure Functions](https://tryfunctions.com/ng-min/try?trial=true) : Limited to 59 mins usage, No credit card required. [Usage](https://theflyingmaverick.com/2018/02/07/try-azure-functions-for-free/)
   - [Try App service](https://tryappservice.azure.com/)
 
+- REST Client - [Postman](https://www.getpostman.com/downloads/)
+
 - [Optional] VS Code C# Extensions : [Download](https://marketplace.visualstudio.com/items?itemName=jchannon.csharpextensions)
 
 
@@ -49,7 +51,5 @@ Execute below command in command prompt(cmd) just to ensure required software is
 
 - [Slides](ML_Net_Praveen_Raghuvanshi_23_Nov_2019.pptx)
 - Target Problems
-  - [Classification(Binary)](./src/Classification(Binary)/README.md) - Predict survival of Titanic Passenger
-  - Regression - Predict taxi-fare 
-  - Image Classification - Photo Search
+  - [Classification(Binary)](./src/Classification(Binary)/README.md) - Sentiment Analysis
 
