@@ -408,6 +408,7 @@ F1Score: 84.04%
   
   namespace SentimentAnalysisWebApi.Controllers
   {
+      [Route("api/[controller]")]
       public class PredictController : ControllerBase
       {
           private readonly PredictionEnginePool<SentimentData, SentimentPrediction> _predictionEnginePool;
