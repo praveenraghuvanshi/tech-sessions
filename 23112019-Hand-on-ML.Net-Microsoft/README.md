@@ -53,3 +53,12 @@ Execute below command in command prompt(cmd) just to ensure required software is
 - Target Problems
   - [Classification(Binary)](./src/Classification(Binary)/README.md) - Sentiment Analysis
 
+#### Contact
+
+##### Email       : praveenraghuvanshi@gmail.com
+
+##### LinkedIn : [https://](https://in.linkedin.com/in/praveenraghuvanshi)[in.linkedin.com/in/praveenraghuvanshi](https://in.linkedin.com/in/praveenraghuvanshi)
+
+##### Github    : [https](https://github.com/praveenraghuvanshi1512)[://](https://github.com/praveenraghuvanshi1512)[github.com/praveenraghuvanshi1512](https://github.com/praveenraghuvanshi1512)
+
+##### Twitter   : [@praveenraghuvan](https://github.com/praveenraghuvanshi1512)
