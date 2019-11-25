@@ -62,3 +62,12 @@ Execute below command in command prompt(cmd) just to ensure required software is
 ##### Github    : [https](https://github.com/praveenraghuvanshi1512)[://](https://github.com/praveenraghuvanshi1512)[github.com/praveenraghuvanshi1512](https://github.com/praveenraghuvanshi1512)
 
 ##### Twitter   : [@praveenraghuvan](https://github.com/praveenraghuvanshi1512)
+
+
+
+#### Discussions/Clarifications
+
+- ML.NET Telegram group : https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
+
+  
+
