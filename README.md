@@ -7,10 +7,10 @@ A repository consisting of Technical sessions delivered
 | 2    | 10-Aug-2019 | Introduction to ML.Net           | DevOn, Embassy Tech Village | Meetup | Anand Gothe  | [Link](https://github.com/praveenraghuvanshi1512/AIML/tree/master/Meetup_DotNet_10_Aug_2019) |
 | 3    | 23-Nov-2019 | Hands-on Workshop on ML.Net      | Microsoft Bellandur         | Meetup | Gurucharan   | [Hands-on ML.Net](23112019-Hand-on-ML.Net-Microsoft)         |
 
-Articles
+### Articles
 
-| S.No | Date          | Topic                                           | Type   | Resources                                                    |
-| ---- | ------------- | ----------------------------------------------- | ------ | ------------------------------------------------------------ |
-| 1    | 12-April-2020 | COVID-19 Data Analysis using .Net DataFrame API | Github | [COVID-19 Analysis](https://github.com/praveenraghuvanshi1512/covid-19) |
-|      |               |                                                 |        |                                                              |
+| S.No | Date          | Topic                                           | Type                        | Resources                                                    |
+| ---- | ------------- | ----------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
+| 1    | 12-April-2020 | COVID-19 Data Analysis using .Net DataFrame API | Jupyter Notebook(C#)/Github | [COVID-19 Analysis](https://github.com/praveenraghuvanshi1512/covid-19) |
+|      |               |                                                 |                             |                                                              |
 
