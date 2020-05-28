@@ -33,7 +33,7 @@ Slack- Community-Forum: http://bit.ly/2XoEwAK
 Twitter : @virtualmlnet
 Schedule : https://virtualml.net/index.php/schedule/
 
-Spread the word and join ML.Net telegram group(UnoOfficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg  
+Spread the word and join ML.Net telegram group(Unofficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg  
 
 ----------------------
 
@@ -64,7 +64,7 @@ Slack- Community-Forum: http://bit.ly/2XoEwAK
 Twitter : @virtualmlnet
 Schedule : https://virtualml.net/index.php/schedule/
 
-Spread the word and join ML.Net telegram group(UnoOfficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg  
+Spread the word and join ML.Net telegram group(Unofficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg  
 
 -----------------------------------
 Hi Swaminathan, 
@@ -77,7 +77,19 @@ Slack- Community-Forum: http://bit.ly/2XoEwAK
 Twitter : @virtualmlnet
 Schedule : https://virtualml.net/index.php/schedule/
 
-Spread the word and join ML.Net telegram group(UnoOfficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
+Spread the word and join ML.Net telegram group(Unofficial) https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
 Please share email so that I can share banner/details. 
 Thanks in advance. Praveen
+
+
+A collection of columns
+In-memory representation of structured data
+Similar to Python Dataframe
+Features: 
+Load dataset from CSV
+Row/Column selection
+Join/Merge Dataframes
+GroupBy
+Null values
+

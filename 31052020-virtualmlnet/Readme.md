@@ -25,7 +25,10 @@
 		  - [ ] 
 		- [ ] Jupyter Notebook - DataFrame API
 		- [ ] ML.Net - Predictions
+		  - [ ] SSA Read about it
 		- [ ] Visualization - XPlotly
+		  - [ ] Linear and log plots
+		  - [ ] 
 		- [ ] Demo
 		- [ ] References
 		- [ ] Thank you and contact details
@@ -52,10 +55,13 @@
   - [.NET Design Review: DataFrame](https://www.youtube.com/watch?v=FAaw4uaYvgY)
   - [Deedle - Alternative to DataFrame](http://bluemountaincapital.github.io/Deedle/index.html)
   - https://xamlbrewer.wordpress.com/category/ml-net/
+  - https://blog.zhaytam.com/2019/12/17/trying-out-dataframe-package-netcore/
 - Dataset
   - [Data on COVID-19 (coronavirus) by *Our World in Data*](https://github.com/owid/covid-19-data/tree/master/public/data)
   - [Slides](https://slides.ourworldindata.org/2020_pandemic/2020_pandemic#/title-slide)
   - [World o meter](https://www.worldometers.info/coronavirus/#page-top)
+- ML.Net
+  - SSA
 - Jupyter Notebook
   - a stop-modify-recompile-restart cycle --> R-E-P-L (*Read-Eval-Print Loop*)
   - 
