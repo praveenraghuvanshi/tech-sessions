@@ -47,7 +47,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
 RUN dotnet help
 
 # Copy course notebooks
-COPY ./TechnicalSessions/* ${HOME}/TechnicalSessions/
+COPY ./31052020-virtualmlnet/* ${HOME}/31052020-virtualmlnet/
 
 # Remove the work folder
 RUN rm -rf ./work
