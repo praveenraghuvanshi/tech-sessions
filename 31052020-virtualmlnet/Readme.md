@@ -63,6 +63,9 @@
 - ML.Net
   - SSA
   - https://github.com/dotnet/machinelearning-samples/tree/master/samples/csharp/end-to-end-apps/Forecasting-Sales
+  - https://github.com/dotnet/machinelearning/issues/5178
 - Jupyter Notebook
   - a stop-modify-recompile-restart cycle --> R-E-P-L (*Read-Eval-Print Loop*)
-  - 
+  - Setup
+    - Docker
+      - docker run -p 8888:8888 virtualmlnet/part-2
