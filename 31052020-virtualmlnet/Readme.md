@@ -62,6 +62,7 @@
   - [World o meter](https://www.worldometers.info/coronavirus/#page-top)
 - ML.Net
   - SSA
+  - https://github.com/dotnet/machinelearning-samples/tree/master/samples/csharp/end-to-end-apps/Forecasting-Sales
 - Jupyter Notebook
   - a stop-modify-recompile-restart cycle --> R-E-P-L (*Read-Eval-Print Loop*)
   - 
