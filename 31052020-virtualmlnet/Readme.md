@@ -1,71 +1,22 @@
-# Virtual ML.Net  : Sat, 5/30/2020 / Sun, 5/31/2020
+# Virtual ML.Net  : Sat, 5/29/2020 - Sun, 5/30/2020
 
 **Website** : https://virtualml.net/
 
-**Session Date and Time:** 31/05/20120 02:30 AM. Saturday Late night /  Sunday Early morning
+**Title** : COVID-19 Exploratory Data Analysis using .Net DataFrame API (C#)
+
+**Session Date and Time:** 31/05/20120 02:30 AM IST
 
 <img src=".\assets\virtualmlnet-banner.png" alt="VirtualML.Net banner" style="zoom: 80%;" />
-
-![VirtualML.Net - Banner detailed](.\assets\virtualmlnet-banner-details.png)
 
 <img src=".\assets\Praveen Raghuvanshi.png" alt="Event Banner - Praveen" style="zoom:80%;" />
 
 <img src=".\assets\virtualmlnet-speakers.png" alt="Virtual ML.Net Speakers" style="zoom:80%;" />
 
-#### Checklist
+Welcome to Virtual ML.Net, First edition of Global Virtual Conference on ML.Net.
 
-- [ ] Slides
-		- [ ] Welcome - Title 
-		- [x] Self Introduction
-		- [x] COVID - Introduction
-		- [x] COVID - Statistics (Latest)
-		- [x] Exploratory Data Analysis - Introduction
-		- [ ] Time Series Analysis - Introduction
-		- [ ] .Net DataFrame API - Introduction
-		  - [ ] 
-		- [ ] Jupyter Notebook - DataFrame API
-		- [ ] ML.Net - Predictions
-		  - [ ] SSA Read about it
-		- [ ] Visualization - XPlotly
-		  - [ ] Linear and log plots
-		  - [ ] 
-		- [ ] Demo
-		- [ ] References
-		- [ ] Thank you and contact details
-- [ ] Jupyter Notebook
-		- [ ] Part - 1 
-				- [ ] Fix time series plots
-		- [ ] Part - 2
-				- [ ] Introduction to Time series
-				- [ ] Improved predcition part 
-		- [ ] Spell check
- - [ ] Setup
-		 - [ ] 	Jupyter notebook running
-		 - [ ] 	Binder/nbviewer
-		 - [ ] 	Battery charged
-		 - [ ] 	Lighting
-		 - [ ] 	Pen and paper
-		 - [ ] 	Exit all applications - iCloud, gitter, teams, telegram, whatsapp, webex teams, jabber
-		 - [ ] 	Hide bookmark
-		 - [ ] 	
+The topic of my talk was ''. In this session, I have started with exploratory data analysis on the dataset gathered from John Hopkins University. The dataset is presented as tables, charts. This was done on Jupyter notebook using .Net DataFrame and ML.Net API.
 
-### Notes
+The notebook is available at 
 
-- Dataframe
-  - [.NET Design Review: DataFrame](https://www.youtube.com/watch?v=FAaw4uaYvgY)
-  - [Deedle - Alternative to DataFrame](http://bluemountaincapital.github.io/Deedle/index.html)
-  - https://xamlbrewer.wordpress.com/category/ml-net/
-  - https://blog.zhaytam.com/2019/12/17/trying-out-dataframe-package-netcore/
-- Dataset
-  - [Data on COVID-19 (coronavirus) by *Our World in Data*](https://github.com/owid/covid-19-data/tree/master/public/data)
-  - [Slides](https://slides.ourworldindata.org/2020_pandemic/2020_pandemic#/title-slide)
-  - [World o meter](https://www.worldometers.info/coronavirus/#page-top)
-- ML.Net
-  - SSA
-  - https://github.com/dotnet/machinelearning-samples/tree/master/samples/csharp/end-to-end-apps/Forecasting-Sales
-  - https://github.com/dotnet/machinelearning/issues/5178
-- Jupyter Notebook
-  - a stop-modify-recompile-restart cycle --> R-E-P-L (*Read-Eval-Print Loop*)
-  - Setup
-    - Docker
-      - docker run -p 8888:8888 virtualmlnet/part-2
+- [Part 1 - EDA](src/part-1)
+- [Part 2 : Time Series and Prediction](src/part-2)
