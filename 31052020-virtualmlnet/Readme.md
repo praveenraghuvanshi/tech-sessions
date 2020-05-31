@@ -16,5 +16,10 @@ Welcome to Virtual ML.Net, First edition of Global Virtual Conference on ML.Net.
 
 The topic of my talk was "COVID-19 Exploratory Data Analysis using .Net DataFrame API (C#)''. In this session, I have started with exploratory data analysis on the dataset gathered from John Hopkins University. The dataset is presented as tables, charts. This was done on Jupyter notebook using .Net DataFrame and ML.Net API.
 
+Links
+
+- [Slides](virtualmlnet-2020.pptx)
+- [Source/Notebook](https://github.com/praveenraghuvanshi1512/covid-19/tree/master)
+
 The notebook is available at [covid](https://github.com/praveenraghuvanshi1512/covid-19/tree/master)
 
