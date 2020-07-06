@@ -59,9 +59,9 @@ Execute below command in command prompt(cmd) just to ensure required software is
 
 ##### LinkedIn : [https://](https://in.linkedin.com/in/praveenraghuvanshi)[in.linkedin.com/in/praveenraghuvanshi](https://in.linkedin.com/in/praveenraghuvanshi)
 
-##### Github    : [https](https://github.com/praveenraghuvanshi1512)[://](https://github.com/praveenraghuvanshi1512)[github.com/praveenraghuvanshi1512](https://github.com/praveenraghuvanshi1512)
+##### Github    : [https](https://github.com/praveenraghuvanshi)[://](https://github.com/praveenraghuvanshi)[github.com/praveenraghuvanshi](https://github.com/praveenraghuvanshi)
 
-##### Twitter   : [@praveenraghuvan](https://github.com/praveenraghuvanshi1512)
+##### Twitter   : [@praveenraghuvan](https://github.com/praveenraghuvanshi)
 
 
 

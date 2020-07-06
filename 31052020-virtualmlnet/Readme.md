@@ -19,7 +19,7 @@ The topic of my talk was "COVID-19 Exploratory Data Analysis using .Net DataFram
 Links
 
 - [Slides](virtualmlnet-2020.pptx)
-- [Source/Notebook](https://github.com/praveenraghuvanshi1512/covid-19/tree/master)
+- [Source/Notebook](https://github.com/praveenraghuvanshi/covid-19/tree/master)
 
-The notebook is available at [covid](https://github.com/praveenraghuvanshi1512/covid-19/tree/master)
+The notebook is available at [covid](https://github.com/praveenraghuvanshi/covid-19/tree/master)
 
