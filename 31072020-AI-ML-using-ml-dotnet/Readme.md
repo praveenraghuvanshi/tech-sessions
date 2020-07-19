@@ -1,25 +1,22 @@
-# Virtual ML.Net  : Sat, 5/29/2020 - Sun, 5/30/2020
+# Applying Data Science and Machine Learning using Microsoft .Net 
 
-**Website** : https://virtualml.net/
+**Meetup** : https://www.meetup.com/Microsoft-Reactor-Bangalore/events/271768185/
 
-**Title** : COVID-19 Exploratory Data Analysis using .Net DataFrame API (C#)
+**Title** : Applying Data Science and Machine Learning using Microsoft .Net 
 
-**Session Date and Time:** 31/05/20120 02:30 AM IST
+**Event**: AzureDemoDay
 
-<img src=".\assets\virtualmlnet-banner.png" alt="VirtualML.Net banner" style="zoom: 80%;" />
+**Organizer**: Microsoft Reactor Bangalore
 
-<img src=".\assets\Praveen Raghuvanshi.png" alt="Event Banner - Praveen" style="zoom:80%;" />
+**Session Date and Time:** 31/07/20120 06:30 PM IST
 
-<img src=".\assets\virtualmlnet-speakers.png" alt="Virtual ML.Net Speakers" style="zoom:80%;" />
+Data Science and Machine learning are not only for python and R developers. If you are a .NET developer and interested in the above topics, don't let your creativity take a hit. Let it flourish by leveraging some of the cool frameworks and libraries developed by the .NET team in the past 1-2 years. In this session, I'll perform exploratory data analysis on the COVID-19 dataset using DataFrame API followed by prediction using ML.NET time series API. It'll be an example-driven session.
 
-Welcome to Virtual ML.Net, First edition of Global Virtual Conference on ML.Net.
+Resources
 
-The topic of my talk was "COVID-19 Exploratory Data Analysis using .Net DataFrame API (C#)''. In this session, I have started with exploratory data analysis on the dataset gathered from John Hopkins University. The dataset is presented as tables, charts. This was done on Jupyter notebook using .Net DataFrame and ML.Net API.
-
-Links
-
-- [Slides](virtualmlnet-2020.pptx)
+- [Deck](AI-ML-Microsft-Reactor.pptx)
+- [Article: A 3- part series](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-introduction-nlb)
 - [Source/Notebook](https://github.com/praveenraghuvanshi/covid-19/tree/master)
 
-The notebook is available at [covid](https://github.com/praveenraghuvanshi/covid-19/tree/master)
+
 
