@@ -18,5 +18,10 @@ Resources
 - [Article: A 3- part series](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-introduction-nlb)
 - [Source/Notebook](https://github.com/praveenraghuvanshi/covid-19/tree/master)
 
+Contact
 
+Twitter : @praveenraghuvan
+LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi
+Github : https://github.com/praveenraghuvanshi
+dev.to : https://dev.to/praveenraghuvanshi
 
