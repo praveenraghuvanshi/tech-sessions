@@ -20,8 +20,8 @@ Resources
 
 Contact
 
-Twitter : @praveenraghuvan
-LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi
-Github : https://github.com/praveenraghuvanshi
+Twitter : @praveenraghuvan\
+LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi \
+Github : https://github.com/praveenraghuvanshi \
 dev.to : https://dev.to/praveenraghuvanshi
 
