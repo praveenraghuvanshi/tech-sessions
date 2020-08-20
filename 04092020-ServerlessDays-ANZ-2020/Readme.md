@@ -191,32 +191,33 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    Navigate to Program.cs and declare below variable to access the path of assets just above the Main method
 
    ```c#
-   private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../")); private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
-   ```
-
-   I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
-
-   <img src=".\assets\main-build.png" alt="Build Model" style="zoom:80%;" />
-
+   private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../")); // x64
+   private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
+```
+   
+I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
+   
+<img src=".\assets\main-build.png" alt="Build Model" style="zoom:80%;" />
    
 
-   In order to load the data to be used within ML pipeline, we need to create MLContext that acts as a starting point of any Machine learning application using ML.Net
-
-   Add below nuget packages for Build Model step
-
+   
+In order to load the data to be used within ML pipeline, we need to create MLContext that acts as a starting point of any Machine learning application using ML.Net
+   
+Add below nuget packages for Build Model step
+   
    - Microsoft.ML
-   - Microsoft.ML.ImageAnalytics
-
-   Steps to build the model
-
+- Microsoft.ML.ImageAnalytics
+   
+Steps to build the model
+   
    - Load data
    - Initialize MLContext and shuffle data
    - Preprocess data
      - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
      - LoadRawImageBytes - Loads image for training
    - Fit - Applied preprocessing to the data
-   - Transform - Get the preprocessed data as a IDataView
-
+- Transform - Get the preprocessed data as a IDataView
+   
    ```c#
    #region Build
    
@@ -237,12 +238,13 @@ We'll create ML pipeline of building a ML model first, train it over existing da
            imageFolder: trainRelativePath,
            inputColumnName: "ImagePath"));
    
-   #endregion
+   var preProcessedData = preprocessingPipeline.Fit(shuffledData).Transform(shuffledData);
+#endregion
    ```
 
    
 
-2. Train Model
+2. **Train Model**
 
    Now data is ready and model is ready to be trained. Training a deep neural network is the core of Machine learning task. During this task, a model processes the set of images provided and extract features such as edges, gradients, patterns and objects. These could be eyes, ears, nose etc. The model does a forward and a backward pass during and adjusts weights of the network in order to learn features better. 
 
@@ -250,7 +252,9 @@ We'll create ML pipeline of building a ML model first, train it over existing da
 
    Steps in training a model
 
-   - Add 'Microsoft.ML.Vision' nuget reference
+   - Add nuget packages
+     - Microsoft.ML.Vision
+     - SciSharp.TensorFlow.Redist
    - ImageClassifierTrainer options
      - FeatureColumnName: Input column name
      - LabelColumnName : Name of column to be predicted
@@ -274,14 +278,26 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    var trainingPipeline = mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
                    .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
    
-   ITransformer trainedModel = trainingPipeline.Fit(trainData);
+   ITransformer trainedModel = trainingPipeline.Fit(preProcessedData);
    
    #endregion
    ```
 
+   Training time might vary based on the selected architecture
+
+   Sample output
+
+   <img src=".\assets\dnn-training.png" alt="DNN Training" style="zoom:80%;" />
+
+   The numbers are not that great as we have supplied very small number images.
+
    
 
-3. Evaluate Model
+3. **Evaluate Model**
+
+   We'll evaluate the model on validation dataset in order to know how good is the model.
+
+   
 
 4. Prediction
 
