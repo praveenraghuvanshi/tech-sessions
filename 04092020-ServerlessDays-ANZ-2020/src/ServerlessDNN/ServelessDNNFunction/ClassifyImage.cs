@@ -15,6 +15,9 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Vision;
 using Newtonsoft.Json;
 using ServelessDNNFunction.DataModels;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 
 namespace ServelessDNNFunction
 {
@@ -51,10 +54,10 @@ namespace ServelessDNNFunction
             }
 
             // STEP-2: Load model
-            string modelPath =
-                @"D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\src\ServerlessDNN\ServerlessDNN\assets\model.zip";// @"http://127.0.0.1:10000/devstoreaccount1/serverlessdnn/model.zip";
+            var modelStream = ReadModelFromBlob();
+
             var mlContext = new MLContext(seed: 1);
-            var trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
+            var trainedModel = mlContext.Model.Load(modelStream, out var modelInputSchema);
 
             // STEP-3: Load Data
             var testImages = ImageData.ReadFromFolder(tempPath, false);
@@ -73,6 +76,22 @@ namespace ServelessDNNFunction
 
             string responseMessage = $"Predicted: {predictedValue}";
             return new OkObjectResult(responseMessage);
+        }
+
+        private static Stream ReadModelFromBlob()
+        {
+            var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME");
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var blobFile = Environment.GetEnvironmentVariable("BLOB_FILE");
+
+            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+            container.CreateIfNotExists(PublicAccessType.Blob);
+
+            var blockBlob = container.GetBlockBlobClient(blobFile);
+            var modelStream = new MemoryStream();
+            blockBlob.DownloadTo(modelStream);
+
+            return modelStream;
         }
 
         private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)

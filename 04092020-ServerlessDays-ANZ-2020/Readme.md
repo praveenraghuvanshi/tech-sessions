@@ -642,7 +642,7 @@ We'll create ML pipeline of building a ML model first, train it over existing da
 
    </details>
 
-### Image Classification - Serverless (Azure Function)
+### Image Classification - Serverless (Azure Function) - Local
 
 We have been successful in creating an ML pipeline and predicting the image for our problem statement of classifying the cat and dog images. This works fine in a console application, but we need our model to be accessible to other applications in order to be used for different use cases. In order to achieve this, we need to expose an endpoint(URL) and consume within a client application. Client applications should allow uploading an image and returning with a response having predicted value(cat or dog).
 
@@ -671,7 +671,7 @@ Let's create a new project and select 'Azure Function' from the project template
 
 In the next dialog, give a name to the project 'ServerlessDNNFunction' and click create.
 
-![image-20200820231359722](D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\assets\azure-function-http-trigger.png)
+<img src=".\assets\azure-function-http-trigger.png" alt="Create project - Http Trigger" style="zoom:80%;" />
 
 This will add a new project to ServerlessDNN solution. Build the solution, just to ensure there are no errors. A default funtion(Function1) will be added.
 
@@ -881,17 +881,61 @@ Navigate back to Azure function in visual studio. In order to load model we need
 - Add nuget package
 
   - Microsoft.ML 
+
   - Microsoft.ML.Vision
+
   - Microsoft.ML.ImageAnalytics
+
   - SciSharp.TensorFlow.Redist
+
+  - Azure.Storage.Blobs
+
+    
 
 - STEP-2: Load Model
 
+  We are going to load model from Azure storage blob. Open local.settings.json and replace with below content
+
+  ```javascript
+  {
+      "IsEncrypted": false,
+      "Values": {
+          "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+          "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+          "CONTAINER_NAME": "serverlessdnn",
+          "BLOB_FILE":  "model.zip"
+      }
+  }
+  ```
+
+  Add 'ReadModelFromBlob' method to read blob from container and return a stream of model.
+
+  ```c#
+  private static Stream ReadModelFromBlob()
+  {
+      var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME");
+      var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+      var blobFile = Environment.GetEnvironmentVariable("BLOB_FILE");
+  
+      BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+      container.CreateIfNotExists(PublicAccessType.Blob);
+  
+      var blockBlob = container.GetBlockBlobClient(blobFile);
+      var modelStream = new MemoryStream();
+      blockBlob.DownloadTo(modelStream);
+  
+      return modelStream;
+  }
+  ```
+
+  Now load the model with below call after saving the uploaded image
+
   ```c#
   // STEP-2: Load model
-  string modelPath = @"<MODEL.ZIP PATH>";
+  var modelStream = ReadModelFromBlob();
+  
   var mlContext = new MLContext(seed: 1);
-  var trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
+  var trainedModel = mlContext.Model.Load(modelStream, out var modelInputSchema);
   ```
 
 - STEP-3: Load Data
@@ -932,6 +976,15 @@ Navigate back to Azure function in visual studio. In order to load model we need
     <img src=".\assets\predicted-cat.png" alt="Predicted Cat" style="zoom:80%;" />
 
   
+
+### Image Classification - Serverless (Azure Function) - Cloud
+
+Now we are going to deploy this function app on Cloud(Azure). We need an Azure subscription for it. Deploying to azure is pretty easy through Visual Studio. Steps in deploying the Azure Function to the cloud is as follows.
+
+1. Prerequisites
+   1. Azure Subscription
+   2. Azure Resource Group
+2. dfads
 
 Copy ModelInput.cs and ModelOutput.cs
 
