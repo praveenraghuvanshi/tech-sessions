@@ -184,7 +184,9 @@ We'll create ML pipeline of building a ML model first, train it over existing da
 
    We have data models and our solution should look like as below
 
-   ![image-20200819100452652](D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\assets\vs-images-models.png)
+   ![Data Models](.\assets\vs-images-models.png)
+
+   
 
    **Load data**
 
@@ -193,53 +195,74 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    ```c#
    private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../")); // x64
    private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
-```
-   
-I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
-   
-<img src=".\assets\main-build.png" alt="Build Model" style="zoom:80%;" />
-   
+   private static string imagesRelativePath = Path.Combine(assetsRelativePath, "images");
+   private static string trainRelativePath = Path.Combine(imagesRelativePath, "train");
+   private static string testRelativePath = Path.Combine(imagesRelativePath, "test");
+   private static string valRelativePath = Path.Combine(imagesRelativePath, "val");
+   ```
+
+   I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
+
+   ![ML pipeline](.\assets\main-build.png)
 
    
-In order to load the data to be used within ML pipeline, we need to create MLContext that acts as a starting point of any Machine learning application using ML.Net
-   
-Add below nuget packages for Build Model step
-   
+
+   In order to load the data to be used within ML pipeline, we need to create MLContext that acts as a starting point of any Machine learning application using ML.Net
+
+   Add below nuget packages for Build Model step
+
    - Microsoft.ML
-- Microsoft.ML.ImageAnalytics
-   
-Steps to build the model
-   
+   - Microsoft.ML.ImageAnalytics
+
+   Steps to build the model
+
    - Load data
    - Initialize MLContext and shuffle data
    - Preprocess data
      - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
      - LoadRawImageBytes - Loads image for training
    - Fit - Applied preprocessing to the data
-- Transform - Get the preprocessed data as a IDataView
+   - Transform - Get the preprocessed data as a IDataView
+
    
+
+   We create an helper method to create a ML pipeline to preprocess the data
+
    ```c#
-   #region Build
-   
-   // Load train data 
-   var images = ImageData.ReadFromFolder(trainRelativePath);
-   
-   // Initialize ML Pipeline
-   var mlContext = new MLContext(seed: 1);
-   IDataView imageData = mlContext.Data.LoadFromEnumerable(images);
-   var shuffledData = mlContext.Data.ShuffleRows(imageData);
-   
-   // Preprocess data
-   var preprocessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
-   		inputColumnName: "Label",
+   private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
+   {
+       var preProcessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
+           inputColumnName: "Label",
            outputColumnName: "LabelAsKey")
            .Append(mlContext.Transforms.LoadRawImageBytes(
            outputColumnName: "Image",
-           imageFolder: trainRelativePath,
+           imageFolder: dataPath,
            inputColumnName: "ImagePath"));
+       return preProcessingPipeline;
+   }
+   ```
+
+   Code for building a model is as follows.
+
+   ```c#
+   #region Build
    
+   Console.WriteLine("\n****** Build Model - Started *******");
+   
+   // Load train data 
+   var trainImages = ImageData.ReadFromFolder(trainRelativePath, true);
+   
+   // Initialize ML Pipeline
+   var mlContext = new MLContext(seed: 1);
+   IDataView trainData = mlContext.Data.LoadFromEnumerable(trainImages);
+   var shuffledData = mlContext.Data.ShuffleRows(trainData);
+   
+   // Preprocess data
+   var preprocessingPipeline = CreatePreprocessingPipeline(mlContext, trainRelativePath);
    var preProcessedData = preprocessingPipeline.Fit(shuffledData).Transform(shuffledData);
-#endregion
+   
+   Console.WriteLine("\n****** Build Model - End *******");
+   #endregion
    ```
 
    
@@ -267,6 +290,8 @@ Steps to build the model
    ```c#
    #region Train
    
+   Console.WriteLine("\n****** Train Model - Started *******");
+   
    var classifierOptions = new ImageClassificationTrainer.Options()
    {
        FeatureColumnName = "Image",
@@ -276,9 +301,11 @@ Steps to build the model
    };
    
    var trainingPipeline = mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
-                   .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+       .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
    
    ITransformer trainedModel = trainingPipeline.Fit(preProcessedData);
+   
+   Console.WriteLine("\n****** Train Model - End *******");
    
    #endregion
    ```
@@ -295,11 +322,318 @@ Steps to build the model
 
 3. **Evaluate Model**
 
-   We'll evaluate the model on validation dataset in order to know how good is the model.
+   We'll evaluate the model on validation dataset in order to know how good is the model and if its ready to be consumed for making predictions. The steps in evaluating the model is as follows.
+
+   - Load Validation data
+   - Preprocess data
+     - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
+     - LoadRawImageBytes - Loads image for evaluating
+   - Evaluate Model using Validation data
+     - MulticlassClassification is used for evaluation and a metric will be returned
+     - Metrics has different parameters such as accuracy, loss that helps determins if a model is good or bad.
+   - Print Metrics
+
+   ```c#
+   private static void PrintMetrics(MulticlassClassificationMetrics metrics)
+   {
+       Console.WriteLine("\n............ Metrics ...........");
+       Console.WriteLine($"Macro Accuracy: {(metrics.MacroAccuracy * 100):0.##}%");
+       Console.WriteLine($"Micro Accuracy: {(metrics.MicroAccuracy * 100):0.##}%");
+       Console.WriteLine($"LogLoss is: {metrics.LogLoss:0.##}, value close to 0 is better");
+       Console.WriteLine(
+       $"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString("0.##")))}, value close to 0 is better");
+   }
+   
+   ```
 
    
 
-4. Prediction
+   ```c#
+   #region Evaluate
+   
+   Console.BackgroundColor = ConsoleColor.DarkMagenta;
+   Console.WriteLine("\n****** Evaluate Model - Started *******");
+   
+   // Load validation data
+   var valImages = ImageData.ReadFromFolder(valRelativePath, true);
+   IDataView valData = mlContext.Data.LoadFromEnumerable(valImages);
+   var valShuffledData = mlContext.Data.ShuffleRows(valData);
+   
+   // Preprocess data
+   var valPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, valRelativePath);
+   var valDataPreprocessed = valPreprocessingPipeline.Fit(valShuffledData).Transform(valShuffledData);
+   IDataView valPredictionData = trainedModel.Transform(valDataPreprocessed);
+   
+   // Evaluate to generate metrics
+   MulticlassClassificationMetrics metrics =
+   mlContext.MulticlassClassification.Evaluate(valPredictionData,
+   labelColumnName: "LabelAsKey",
+   predictedLabelColumnName: "PredictedLabel");
+   
+   // Print Metrics
+   PrintMetrics(metrics);
+   
+   Console.ResetColor();
+   Console.WriteLine("\n****** Evaluate Model - End *******");
+   
+   #endregion
+   ```
+
+   Result:
+
+   <img src=".\assets\model-evaluation.png" alt="Model Evaluation" style="zoom:80%;" />
+
+   As seen from the result, model trained with just 10 images of each class(cat and dog), we got a fairly good accuracy of 90% and loss it also less. We'll now use this for predicting on images which model has never seen/trained on.
+
+   
+
+4. **Prediction**
+
+   Metrics may vary due to varied reasons such as volume of data, ML algorithm and problem domain. Once we are convinced numbers are good enough and model is ready for deployment to application, we need to do a final check on the model on the dataset it has never seen. This is achieved through PredictionEngine in ML.Net. The steps in predicting a model is as follows.
+
+   - Load Test dataset
+   - Preprocess data
+     - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
+     - LoadRawImageBytes - Loads image for predicting
+   - Create a Prediction Engine
+   - Perform prediction and display the result
+
+   ```c#
+   #region Predict
+   
+   Console.BackgroundColor = ConsoleColor.DarkBlue;
+   Console.WriteLine("\n****** Prediction - Started *******");
+   
+   // Load Data
+   var testImages = ImageData.ReadFromFolder(testRelativePath, true);
+   IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
+   var testShuffledData = mlContext.Data.ShuffleRows(testData);
+   
+   // Preprocess data
+   var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, testRelativePath);
+   var testDataPreprocessed = testPreprocessingPipeline.Fit(testShuffledData).Transform(testShuffledData);
+   IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
+   
+   // Create PredictionEngine and perform prediction
+   PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
+   IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
+   
+   // Display Result
+   Console.WriteLine("\nClassifying multiple images");
+   foreach (var prediction in predictions)
+   {
+       string imageName = Path.GetFileName(prediction.ImagePath);
+       Console.WriteLine($"Image: {imageName} | Actual Value: {prediction.Label} | Predicted Value: {prediction.PredictedLabel}");
+   }
+   
+   Console.ResetColor();
+   Console.WriteLine("\n****** Prediction - End *******");
+   
+   #endregion
+   ```
+
+   Result:
+
+   <img src=".\assets\model-prediction.png" alt="Model Prediction" style="zoom:80%;" />
+
+   The results are phenomenal as we can see the mode did a good job of classifying a dog and cat with all correct predictions.
+
+   
+
+5. **Save Model**
+
+   This is the last step in ML pipeline and ML.Net has an API to save the trained model which can be further used in different applications such as console, web API and Azure functions.
+
+   Add model path to the list of directory/file paths
+
+   ```c#
+   private static string modelOutputPath = Path.Combine(assetsRelativePath, "model.zip");
+   ```
+
+   We'll use Model.Save() API to save the model to 'assets' folder with the name 'model.zip'
+
+   ```c#
+   #region Save Model
+   
+   Console.WriteLine("\n****** Save Model - Start *******");
+   
+   mlContext.Model.Save(
+       model: trainedModel,
+       inputSchema: null,
+       filePath: modelOutputPath);
+   
+   Console.WriteLine($"\nModel saved to : {modelOutputPath}");
+   #endregion
+   ```
+
+   Full source for Program.cs
+
+   ```c#
+   using System;
+   using System.Collections.Generic;
+   using System.IO;
+   using System.Linq;
+   using Microsoft.ML;
+   using Microsoft.ML.Data;
+   using Microsoft.ML.Vision;
+   using ServerlessDNN.DataModels;
+   
+   namespace ServerlessDNN
+   {
+       class Program
+       {
+           private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../")); // x64
+           private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
+           private static string imagesRelativePath = Path.Combine(assetsRelativePath, "images");
+           private static string trainRelativePath = Path.Combine(imagesRelativePath, "train");
+           private static string testRelativePath = Path.Combine(imagesRelativePath, "test");
+           private static string valRelativePath = Path.Combine(imagesRelativePath, "val");
+           private static string modelOutputPath = Path.Combine(assetsRelativePath, "model.zip");
+   
+           static void Main(string[] args)
+           {
+               Console.WriteLine("Welcome to Serverless Deep Neural Network example!!!");
+   
+               #region Build
+   
+               Console.WriteLine("\n****** Build Model - Started *******");
+   
+               // Load train data 
+               var trainImages = ImageData.ReadFromFolder(trainRelativePath, true);
+   
+               // Initialize ML Pipeline
+               var mlContext = new MLContext(seed: 1);
+               IDataView trainData = mlContext.Data.LoadFromEnumerable(trainImages);
+               var shuffledData = mlContext.Data.ShuffleRows(trainData);
+   
+               // Preprocess data
+               var preprocessingPipeline = CreatePreprocessingPipeline(mlContext, trainRelativePath);
+               var preProcessedData = preprocessingPipeline.Fit(shuffledData).Transform(shuffledData);
+   
+               Console.WriteLine("\n****** Build Model - End *******");
+               #endregion
+   
+               #region Train
+   
+               Console.WriteLine("\n****** Train Model - Started *******");
+   
+               var classifierOptions = new ImageClassificationTrainer.Options()
+               {
+                   FeatureColumnName = "Image",
+                   LabelColumnName = "LabelAsKey",
+                   Arch = ImageClassificationTrainer.Architecture.ResnetV2101,
+                   MetricsCallback = (metrics) => Console.WriteLine(metrics)
+               };
+   
+               var trainingPipeline = mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
+                   .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+   
+               ITransformer trainedModel = trainingPipeline.Fit(preProcessedData);
+   
+               Console.WriteLine("\n****** Train Model - End *******");
+   
+               #endregion
+   
+               #region Evaluate
+   
+               Console.BackgroundColor = ConsoleColor.DarkMagenta;
+               Console.WriteLine("\n****** Evaluate Model - Started *******");
+   
+               // Load validation data
+               var valImages = ImageData.ReadFromFolder(valRelativePath, true);
+               IDataView valData = mlContext.Data.LoadFromEnumerable(valImages);
+               var valShuffledData = mlContext.Data.ShuffleRows(valData);
+               
+               // Preprocess data
+               var valPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, valRelativePath);
+               var valDataPreprocessed = valPreprocessingPipeline.Fit(valShuffledData).Transform(valShuffledData);
+               IDataView valPredictionData = trainedModel.Transform(valDataPreprocessed);
+   
+               // Evaluate to generate metrics
+               MulticlassClassificationMetrics metrics =
+                   mlContext.MulticlassClassification.Evaluate(valPredictionData,
+                       labelColumnName: "LabelAsKey",
+                       predictedLabelColumnName: "PredictedLabel");
+   
+               // Print Metrics
+               PrintMetrics(metrics);
+   
+               Console.ResetColor();
+               Console.WriteLine("\n****** Evaluate Model - End *******");
+   
+               #endregion
+   
+               #region Predict
+   
+               Console.BackgroundColor = ConsoleColor.DarkBlue;
+               Console.WriteLine("\n****** Prediction - Started *******");
+   
+               // Load Data
+               var testImages = ImageData.ReadFromFolder(testRelativePath, true);
+               IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
+               var testShuffledData = mlContext.Data.ShuffleRows(testData);
+   
+               // Preprocess data
+               var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, testRelativePath);
+               var testDataPreprocessed = testPreprocessingPipeline.Fit(testShuffledData).Transform(testShuffledData);
+               IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
+   
+               // Create PredictionEngine and perform prediction
+               PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
+               IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
+               
+               // Display Result
+               Console.WriteLine("\nClassifying multiple images");
+               foreach (var prediction in predictions)
+               {
+                   string imageName = Path.GetFileName(prediction.ImagePath);
+                   Console.WriteLine($"Image: {imageName} | Actual Value: {prediction.Label} | Predicted Value: {prediction.PredictedLabel}");
+               }
+   
+               Console.ResetColor();
+               Console.WriteLine("\n****** Prediction - End *******");
+   
+               #endregion
+   
+               #region Save Model
+   
+               Console.WriteLine("\n****** Save Model - Start *******");
+   
+               mlContext.Model.Save(
+                   model: trainedModel,
+                   inputSchema: null,
+                   filePath: modelOutputPath);
+   
+               Console.WriteLine($"\nModel saved to : {modelOutputPath}");
+               #endregion
+           }
+   
+           private static void PrintMetrics(MulticlassClassificationMetrics metrics)
+           {
+               Console.WriteLine("\n............ Metrics ...........");
+               Console.WriteLine($"Macro Accuracy: {(metrics.MacroAccuracy * 100):0.##}%");
+               Console.WriteLine($"Micro Accuracy: {(metrics.MicroAccuracy * 100):0.##}%");
+               Console.WriteLine($"LogLoss is: {metrics.LogLoss:0.##}, value close to 0 is better");
+               Console.WriteLine(
+                   $"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString("0.##")))}, value close to 0 is better");
+           }
+   
+           private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
+           {
+               var preProcessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
+                       inputColumnName: "Label",
+                       outputColumnName: "LabelAsKey")
+                   .Append(mlContext.Transforms.LoadRawImageBytes(
+                       outputColumnName: "Image",
+                       imageFolder: dataPath,
+                       inputColumnName: "ImagePath"));
+               return preProcessingPipeline;
+           }
+       }
+   }
+   ```
+
+   
 
 ### Local
 

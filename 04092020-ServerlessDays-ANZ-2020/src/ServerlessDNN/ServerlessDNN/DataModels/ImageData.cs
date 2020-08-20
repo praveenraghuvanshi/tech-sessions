@@ -24,13 +24,39 @@ namespace ServerlessDNN.DataModels
         /// Gets the collection images from the specified folder
         /// </summary>
         /// <param name="imageFolder"></param>
+        /// <param name="useFolderNameAsLabel">Uses folder name as label instead of file name</param>
         /// <returns></returns>
-        public static IEnumerable<ImageData> ReadFromFolder(string imageFolder)
+        public static IEnumerable<ImageData> ReadFromFolder(string imageFolder, bool useFolderNameAsLabel = false)
         {
-            return Directory
-                .GetFiles(imageFolder, "*", SearchOption.AllDirectories)
-                .Where(filepath => Path.GetExtension(filepath) == ".jpg" || Path.GetExtension(filepath) == ".png")
-                .Select(filePath => new ImageData {ImagePath = filePath, Label = Path.GetFileName(filePath)});
+            var files = Directory.GetFiles(imageFolder, "*", searchOption: SearchOption.AllDirectories);
+
+            foreach (var file in files)
+            {
+                if ((Path.GetExtension(file) != ".jpg") && (Path.GetExtension(file) != ".png"))
+                    continue;
+
+                var label = Path.GetFileName(file);
+
+                if (useFolderNameAsLabel)
+                    label = Directory.GetParent(file).Name;
+                else
+                {
+                    for (int index = 0; index < label.Length; index++)
+                    {
+                        if (!char.IsLetter(label[index]))
+                        {
+                            label = label.Substring(0, index);
+                            break;
+                        }
+                    }
+                }
+
+                yield return new ImageData()
+                {
+                    ImagePath = file,
+                    Label = label
+                };
+            }
         }
     }
 }
