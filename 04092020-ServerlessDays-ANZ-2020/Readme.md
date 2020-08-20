@@ -52,7 +52,7 @@ Dataset folder is structured as below.
 
 Sample Images
 
-![Sample Images](.\assets\sample-images.png)
+<img src=".\assets\sample-images.png" alt="Sample Images" style="zoom:80%;" />
 
 ### Image Classification - Console Application(C#)
 
