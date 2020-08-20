@@ -40,7 +40,7 @@ Its a good practice to divide the dataset into train, test and validation datase
 - **Validation:**  A validation dataset is used to evaluate the accuracy of trained model. 
 - **Test:** A test dataset is used to make predictions using trained model.
 
-<img src="D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\assets\data-split.png" alt="Data Split" style="zoom:50%;" />
+<img src=".\assets\data-split.png" alt="Data Split" style="zoom:50%;" />
 
 The dataset is further divided as per the classes to be predicted. In this case, its cat and dog.
 
@@ -52,7 +52,7 @@ Dataset folder is structured as below.
 
 Sample Images
 
-![Sample Images](D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\assets\sample-images.png)
+![Sample Images](.\assets\sample-images.png)
 
 ### Image Classification - Console Application(C#)
 
@@ -68,7 +68,7 @@ Add a directory 'assets' and copy the 'Images' directory along with images of ca
 
 We'll create ML pipeline of building a ML model first, train it over existing data and evaluate it on validation data. Once we are convinced with the accuracy, we'll make predictions over test data.
 
-![ML Pipeline](.\assets\ml-pipeline.png)
+<img src=".\assets\ml-pipeline.png" alt="ML Pipeline" style="zoom:80%;" />
 
 1. **Build Model**
 
@@ -184,7 +184,7 @@ We'll create ML pipeline of building a ML model first, train it over existing da
 
    We have data models and our solution should look like as below
 
-   ![Data Models](.\assets\vs-images-models.png)
+   <img src=".\assets\vs-images-models.png" alt="Data Models" style="zoom:80%;" />
 
    
 
@@ -203,7 +203,7 @@ We'll create ML pipeline of building a ML model first, train it over existing da
 
    I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
 
-   ![ML pipeline](.\assets\main-build.png)
+   <img src=".\assets\main-build.png" alt="Build Model" style="zoom:80%;" />
 
    
 
