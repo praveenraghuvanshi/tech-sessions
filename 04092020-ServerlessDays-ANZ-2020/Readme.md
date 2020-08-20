@@ -466,10 +466,9 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    #endregion
    ```
 
-   Full source for Program.cs
-   
+ 
    <details>
-    <summary>Click for full source</summary>
+    <summary><h2>Click for full source</h2></summary>
     
 
    ```c#
