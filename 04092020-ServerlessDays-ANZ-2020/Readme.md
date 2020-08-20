@@ -4,21 +4,6 @@
 
 dfaf
 
-<details>
-    <summary>Click for full source</summary>
-    
-    <p>
-        ```c#
-        public class Sample 
-        {
-        	public List<int> Samples { get; set; }
-        }
-        ```
-    </p>
-</details>
-
-</details>
-
 ## Serverless
 
 dfa
@@ -482,6 +467,10 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    ```
 
    Full source for Program.cs
+   
+   <details>
+    <summary>Click for full source</summary>
+    
 
    ```c#
    using System;
@@ -647,7 +636,8 @@ We'll create ML pipeline of building a ML model first, train it over existing da
        }
    }
    ```
-
+   
+   </details>
    
 
 ### Local
