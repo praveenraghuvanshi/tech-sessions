@@ -28,7 +28,9 @@ We are going to create an application that will classify an image as a cat or do
 
 - IDE - [Visual Studio](https://visualstudio.microsoft.com/) / [Visual Studio Code](https://code.visualstudio.com/download)
 - REST Client - [Postman](https://www.postman.com/downloads/)
-- Serverless Deployment - [Azure subscription (Only for cloud deployment to Azure Function)](https://azure.microsoft.com/en-in/)
+- Serverless Deployment
+  - Local : Azure function and Storage emulator
+  - Cloud: [Azure subscription (Only for cloud deployment to Azure Function)](https://azure.microsoft.com/en-in/) and Azure blobl storage
 
 ### Dataset
 
@@ -53,6 +55,8 @@ Dataset folder is structured as below.
 Sample Images
 
 <img src=".\assets\sample-images.png" alt="Sample Images" style="zoom:80%;" />
+
+
 
 ### Image Classification - Console Application(C#)
 
@@ -466,10 +470,10 @@ We'll create ML pipeline of building a ML model first, train it over existing da
    #endregion
    ```
 
- 
+
    <details>
     <summary><h2>Click for full source</h2></summary>
-    
+​    
 
    ```c#
    using System;
@@ -635,13 +639,301 @@ We'll create ML pipeline of building a ML model first, train it over existing da
        }
    }
    ```
-   
+
    </details>
-   
 
-### Local
+### Image Classification - Serverless (Azure Function)
 
-- - 
+We have been successful in creating an ML pipeline and predicting the image for our problem statement of classifying the cat and dog images. This works fine in a console application, but we need our model to be accessible to other applications in order to be used for different use cases. In order to achieve this, we need to expose an endpoint(URL) and consume within a client application. Client applications should allow uploading an image and returning with a response having predicted value(cat or dog).
+
+In Azure, we can achieve this using different options available such as Azure App service, Azure Functions. Azure App service uses App service plan and is more expensive compared to Azure Function which is serverless and billed based on usage only. We need an Azure subscription in order to use Azure Functions. Limited time subscription can be obtained on registration at [Azure portal](https://azure.microsoft.com/en-in/free/).
+
+Steps in creating a image classification serverless function using Azure Function
+
+- Create Azure Function project using visual studio - Http Trigger
+- Add nuget packages
+  - Microsoft.ML
+- Add Http trigger function to the project
+- Access model trained in ML pipeline in the function - model.zip
+  - Local - Access from system drive
+  - Cloud - Upload to Azure blob storage and access it from there.
+- Load model
+- Make prediction and return result as a response
+- Validate Azure function endpoint through Postman REST client.
+
+I'll first create Azure function locally using template present in Visual Studio. Once everything is working fine, I'll deploy azure function to cloud.
+
+Let's create a new project and select 'Azure Function' from the project template and add this project to the existing solution.
+
+<img src=".\assets\azure-function-template.png" alt="Azure Function Template" style="zoom:67%;" />
+
+
+
+In the next dialog, give a name to the project 'ServerlessDNNFunction' and click create.
+
+![image-20200820231359722](D:\Praveen\sourcecontrol\github\praveenraghuvanshi\tech-sessions\04092020-ServerlessDays-ANZ-2020\assets\azure-function-http-trigger.png)
+
+This will add a new project to ServerlessDNN solution. Build the solution, just to ensure there are no errors. A default funtion(Function1) will be added.
+
+Rename 'Function1.cs' file to ClassifyImage.cs and ensure it gets change in the function attribute as well as shown below.
+
+```c#
+namespace ServelessDNNFunction
+{
+    public static class ClassifyImage
+    {
+        [FunctionName("ClassifyImage")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string name = req.Query["name"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            name = name ?? data?.name;
+
+            string responseMessage = string.IsNullOrEmpty(name)
+                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+
+            return new OkObjectResult(responseMessage);
+        }
+    }
+}
+```
+
+Press F5 to run the project and it should generate an endpoint like http://localhost:7071/api/ClassifyImage
+
+<img src=".\assets\azure-function-endpoint.png" alt="Azure Function Endpoint" style="zoom:80%;" />
+
+Hit the url in browser and message 'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.' must be displayed.
+
+Remove 'get' from the HttpTrigger attribute of the function as we only need 'post' to upload an image.
+
+In order to upload an image from postman, create a POST request with above URL and select 'Body' as binary. Select a file by clicking on 'Select File' in the Body tab
+
+<img src=".\assets\postman-post-request.png" alt="Postman POST request" style="zoom:80%;" />
+
+Add below code in Azure function to read and save uploaded image to temp directory
+
+- STEP-1: Save image to Temp path
+
+```c#
+string inputFileName = "inputimage.jpg";
+string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+string imagePath = Path.Join(tempPath, inputFileName);
+var inputStream = req.Body;
+
+// STEP-1: Save image to temp path
+try
+{
+    if (Directory.Exists(tempPath) == false)
+    {
+        Directory.CreateDirectory(tempPath);
+    }
+    await using (FileStream outputFileStream = new FileStream(imagePath, FileMode.Create))
+    {
+        await inputStream.CopyToAsync(outputFileStream);
+    }
+}
+catch (Exception e)
+{
+    log.LogError(e, e.Message);
+    throw;
+}
+```
+
+Now, we need to load the saved model 'model.zip'.  The size is file around 159MB. The file can be  accessed through disk or Storage Blob. In order to keep the experience same for both local and cloud, I have used [storage emulator](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator) for storing/reading the model. The model can be uploaded through [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-in/features/storage-explorer/).
+
+Please follow steps to create a container 'serverlessdnn' and upload model.zip
+
+Launch Azure Storage Explorer and select 'Local & Attached' account.
+
+<img src=".\assets\storage-explorer-create-blob.png" alt="Create Blob Container" style="zoom:80%;" />
+
+Select 'serverlessdnn' and click on Upload to upload model.zip
+
+<img src=".\assets\storage-explorer-upload.png" alt="Upload file to blob" style="zoom:80%;" />
+
+<img src=".\assets\storage-explorer-upload-dialog.png" alt="Upload Model" style="zoom:80%;" />
+
+Model will be uploaded to blob and available to be used.
+
+<img src=".\assets\storage-explorer-model.png" alt="Uploaded Model" style="zoom:80%;" />
+
+Navigate back to Azure function in visual studio. In order to load model we need to have below things
+
+- Storage blob connection string : double click on local.settings.json file in project explorer
+
+  <img src=".\assets\blob-storage-conn-string.png" alt="Blobl Storage Connection String" style="zoom:80%;" />
+
+  
+
+- Add input and output model schema(classes) in order to load model and make predictions along with InputData
+
+  
+
+  ```c#
+  using System;
+  
+  namespace ServelessDNNFunction.DataModels
+  {
+      /// <summary>
+      /// Defines schema for the input data
+      /// </summary>
+      public class ModelInput
+      {
+          /// <summary>
+          /// A byte[] representation of the image
+          /// </summary>
+          public byte[] Image { get; set; }
+  
+          /// <summary>
+          /// Numerical representation of the Label
+          /// </summary>
+          public UInt32 LabelAsKey { get; set; }
+  
+          /// <summary>
+          /// Fully qualified path of stored image
+          /// </summary>
+          public string ImagePath { get; set; }
+  
+          /// <summary>
+          /// It is the category the image belongs to. This is the value to predict.
+          /// </summary>
+          public string Label { get; set; }
+      }
+  }
+  ```
+
+  ```c#
+  using System;
+  
+  namespace ServelessDNNFunction.DataModels
+  {
+      /// <summary>
+      /// Defines schema for the output data
+      /// </summary>
+      class ModelOutput
+      {
+          /// <summary>
+          /// Fully qualified path of stored image
+          /// </summary>
+          public string ImagePath { get; set; }
+  
+          /// <summary>
+          /// It is the category the image belongs to. This is the value to predict.
+          /// </summary>
+          public string Label { get; set; }
+  
+          /// <summary>
+          /// The value predicted by the model
+          /// </summary>
+          public string PredictedLabel { get; set; }
+      }
+  }
+  ```
+
+  ```c#
+  using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+  
+  namespace ServerlessDNN.DataModels
+  {
+      /// <summary>
+      /// Manages information about the images
+      /// </summary>
+      public class ImageData
+      {
+          /// <summary>
+          /// Fully qualified path of stored image
+          /// </summary>
+          public string ImagePath;
+  
+          /// <summary>
+          /// It is the category the image belongs to. This is the value to predict.
+          /// </summary>
+          public string Label;
+  
+          /// <summary>
+          /// Gets the collection images from the specified folder
+          /// </summary>
+          /// <param name="imageFolder"></param>
+          /// <returns></returns>
+          public static IEnumerable<ImageData> ReadFromFile(string imageFolder)
+          {
+              return Directory
+                  .GetFiles(imageFolder)
+                  .Where(filepath => Path.GetExtension(filepath) == ".jpg" || Path.GetExtension(filepath) == ".png")
+                  .Select(filePath => new ImageData {ImagePath = filePath, Label = Path.GetFileName(filePath)});
+          }
+      }
+  }
+  ```
+
+  
+
+- Add nuget package
+
+  - Microsoft.ML 
+  - Microsoft.ML.Vision
+  - Microsoft.ML.ImageAnalytics
+  - SciSharp.TensorFlow.Redist
+
+- STEP-2: Load Model
+
+  ```c#
+  // STEP-2: Load model
+  string modelPath = @"<MODEL.ZIP PATH>";
+  var mlContext = new MLContext(seed: 1);
+  var trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
+  ```
+
+- STEP-3: Load Data
+
+  ```c#
+  // STEP-3: Load Data
+  var testImages = ImageData.ReadFromFolder(tempPath, false);
+  IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
+  ```
+
+- STEP-4:  Preprocess Data
+
+  ```c#
+  // STEP-4: Preprocess data
+  var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, tempPath);
+  var testDataPreprocessed = testPreprocessingPipeline.Fit(testData).Transform(testData);
+  IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
+  ```
+
+- STEP-5: 
+
+  ```c#
+  // STEP-5: Create PredictionEngine and perform prediction
+  PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
+  IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
+  
+  var predictedValue = predictions?.FirstOrDefault().PredictedLabel;
+  ```
+
+- Result
+
+  - Input image
+
+    <img src=".\assets\input-cat.png" alt="Input - Cat" style="zoom:80%;" />
+
+  - Predicted: Cat
+
+    <img src=".\assets\predicted-cat.png" alt="Predicted Cat" style="zoom:80%;" />
+
+  
+
+Copy ModelInput.cs and ModelOutput.cs
 
 Let's get started. 
 
@@ -679,6 +971,13 @@ das
 ## Conclusion
 
 **Contact**
+
+
+
+## References
+
+- https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-vs
+- https://blog.rasmustc.com/multipart-data-with-azure-functions-httptriggers/
 
 
 
