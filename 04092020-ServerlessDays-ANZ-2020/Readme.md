@@ -4,6 +4,21 @@
 
 dfaf
 
+<details>
+    <summary>Click for full source</summary>
+    
+    <p>
+        ```c#
+        public class Sample 
+        {
+        	public List<int> Samples { get; set; }
+        }
+        ```
+    </p>
+</details>
+
+</details>
+
 ## Serverless
 
 dfa
