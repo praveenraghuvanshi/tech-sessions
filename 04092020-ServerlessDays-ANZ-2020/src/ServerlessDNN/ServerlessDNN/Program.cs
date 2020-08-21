@@ -107,14 +107,15 @@ namespace ServerlessDNN
             var testDataPreprocessed = testPreprocessingPipeline.Fit(testShuffledData).Transform(testShuffledData);
             IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
 
-            // Create PredictionEngine and perform prediction
+            // Create PredictionEngine
             PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-            IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
-            
+            IEnumerable<ModelInput> inputImages = mlContext.Data.CreateEnumerable<ModelInput>(testPredictionData, reuseRowObject: true);
+
             // Display Result
             Console.WriteLine("\nClassifying multiple images");
-            foreach (var prediction in predictions)
+            foreach (var imgData in inputImages)
             {
+                var prediction = predictionEngine.Predict(imgData);
                 string imageName = Path.GetFileName(prediction.ImagePath);
                 Console.WriteLine($"Image: {imageName} | Actual Value: {prediction.Label} | Predicted Value: {prediction.PredictedLabel}");
             }

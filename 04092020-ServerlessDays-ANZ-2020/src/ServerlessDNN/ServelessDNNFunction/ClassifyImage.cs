@@ -23,6 +23,8 @@ namespace ServelessDNNFunction
 {
     public static class ClassifyImage
     {
+        private static object _predictionEngineLock = new object();
+
         [FunctionName("ClassifyImage")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -31,13 +33,16 @@ namespace ServelessDNNFunction
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string inputFileName = "inputimage.jpg";
-            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            string imagePath = Path.Join(tempPath, inputFileName);
-            var inputStream = req.Body;
+            string tempPath = string.Empty;
 
-            // STEP-1: Save image to temp path
             try
             {
+                tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                string imagePath = Path.Join(tempPath, inputFileName);
+
+                var inputStream = req.Body;
+
+                // STEP-1: Save image to temp path
                 if (Directory.Exists(tempPath) == false)
                 {
                     Directory.CreateDirectory(tempPath);
@@ -54,7 +59,7 @@ namespace ServelessDNNFunction
             }
 
             // STEP-2: Load model
-            var modelStream = ReadModelFromBlob();
+            var modelStream = ReadModelFromBlob(log);
 
             var mlContext = new MLContext(seed: 1);
             var trainedModel = mlContext.Model.Load(modelStream, out var modelInputSchema);
@@ -70,28 +75,42 @@ namespace ServelessDNNFunction
 
             // STEP-5: Create PredictionEngine and perform prediction
             PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-            IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
+            ModelInput input = mlContext.Data.CreateEnumerable<ModelInput>(testPredictionData, reuseRowObject: true).FirstOrDefault();
+            var predictedOutput = predictionEngine.Predict(input);
 
-            var predictedValue = predictions?.FirstOrDefault().PredictedLabel;
+            string imageName = Path.GetFileName(predictedOutput.ImagePath);
+            string logMessage =
+                $"Image: {imageName} | Actual Value: {predictedOutput.Label} | Predicted Value: {predictedOutput.PredictedLabel}";
+            log.LogInformation($"{logMessage}");
 
-            string responseMessage = $"Predicted: {predictedValue}";
+            var responseMessage = $"Predicted : {predictedOutput.PredictedLabel}";
             return new OkObjectResult(responseMessage);
         }
 
-        private static Stream ReadModelFromBlob()
+        private static Stream ReadModelFromBlob(ILogger log)
         {
             var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME");
             var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
             var blobFile = Environment.GetEnvironmentVariable("BLOB_FILE");
 
-            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
-            container.CreateIfNotExists(PublicAccessType.Blob);
+            try
+            {
+                BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+                container.CreateIfNotExists(PublicAccessType.Blob);
+                var blockBlob = container.GetBlockBlobClient(blobFile);
+                var modelStream = new MemoryStream();
 
-            var blockBlob = container.GetBlockBlobClient(blobFile);
-            var modelStream = new MemoryStream();
-            blockBlob.DownloadTo(modelStream);
+                blockBlob.DownloadTo(modelStream);
+                return modelStream;
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, e.Message);
+                throw;
+            }
+            
 
-            return modelStream;
+            return null;
         }
 
         private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
