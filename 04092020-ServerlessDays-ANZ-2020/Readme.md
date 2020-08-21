@@ -1138,56 +1138,17 @@ Now we are going to deploy this function app on Cloud(Azure). We need an Azure s
 
    4. Classify image using REST Client - Postman
 
-   5. 
-
-   6. fdsa
-
       
 
-   7. dfd
-
-Click Finish and resolve any warnings displayed. Once everything is resolved, click on publish to deploy it to cloud.
+   5. fdsa
 
 
-
-1. dfas
-
-Copy ModelInput.cs and ModelOutput.cs
-
-Let's get started. 
-
-#### Create a Deep Neural Network for image classification
-
-fads
-
-##### ONNX
-
-
-
-#### Create a local Azure function
-
-fafa
-
-#### Validate using Postman
-
-### Cloud
-
-- Prerequisites
-  - Azure Function
-
-#### Create a cloud Azure Function
-
-fad
-
-#### Validate using Postman
-
-das
-
-### Dockerize
-
-## Results
 
 ## Conclusion
+
+In this tutorial, we saw how we can leverage transfer learning to create deep neural networks and consume it within .Net ecosystem. We learned lot of concepts such as Deep Neural networks, Serverless, Azure Functions and ML.Net and created a good enough application that combines lot of these things together. The accuracy and results are pretty good with such a small dataset. This strategy 
+
+
 
 **Contact**
 

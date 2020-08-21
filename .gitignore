@@ -371,3 +371,6 @@ FakesAssemblies/
 *.opt
 
 # *****************************
+
+# Azure Functions
+ServiceDependencies/
