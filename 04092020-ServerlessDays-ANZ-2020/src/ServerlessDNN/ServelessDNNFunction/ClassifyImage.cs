@@ -76,7 +76,19 @@ namespace ServelessDNNFunction
             // STEP-5: Create PredictionEngine and perform prediction
             PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
             ModelInput input = mlContext.Data.CreateEnumerable<ModelInput>(testPredictionData, reuseRowObject: true).FirstOrDefault();
-            var predictedOutput = predictionEngine.Predict(input);
+
+            ModelOutput predictedOutput = null;
+            try
+            {
+                log.LogInformation("Before Prediction");
+                predictedOutput = predictionEngine.Predict(input);
+                log.LogInformation("After Prediction");
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, e.Message);
+                return new OkObjectResult($"An exception occured\n{e.Message}");
+            }
 
             string imageName = Path.GetFileName(predictedOutput.ImagePath);
             string logMessage =
