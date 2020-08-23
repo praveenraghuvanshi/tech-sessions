@@ -1,7 +1,7 @@
 [![HitCount](http://hits.dwyl.com/praveenraghuvanshi/tech-sessions.svg)](http://hits.dwyl.com/praveenraghuvanshi/tech-sessions)
 
 # Technical Sessions
-A repository consisting of Technical sessions delivered
+A repository of Technical sessions delivered
 
 ### Sessions Delivered
 
