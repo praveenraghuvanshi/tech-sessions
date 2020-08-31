@@ -2,27 +2,47 @@
 
 ## Introduction
 
-dfaf
+Have you ever wondered how does a machine is able to classify among different species of animals just by looking an image? How does a machine is able to predict there is a cat or dog in an image. A rule based system might work for some images, however when a new or unseen image is given to the machine, there are chances prediction may go wrong. Also, rule based system might not scale for large number of images. Deep Neural Network comes as a rescue for such kind of problems and it really scales well. Deep Neural Network simplifies and help classify the things. In this tutorial, I will cover some concepts related to Deep Neural Networks and show how to build a serverless image classification application using Microsoft Azure Functions and ML.Net framework. The implementation will be in C# language. Before I jump into code, let's revisit some of the concepts used in this tutorial
 
 ## Serverless
 
-dfa
+<img src=".\assets\serverless-computing.png" alt="Serverless computing" style="zoom:80%;" />
+
+​					src: https://parkardigital.com/serverless-cloud-computing/
+
+Serverless is an execution model where the cloud provider such as AWS, Azure or Google cloud is responsible for executing a piece of code by dynamically allocating the resources. The infrastructure is managed and maintained by the Cloud providers. The consumer is billed only for the resources consumed to run the code. It's an efficient way to reduce the overhead and cost of managing the servers. The code that is executed is in the form of a function, hence sometimes its called 'Function as a Service(Faas).  It allows you to focus on  writing business logic instead of spending time on managing the infrastructure.
 
 ## Azure Functions
 
-fadsf
+<img src=".\assets\azure-function-img.png" alt="Azure Functions" style="zoom:80%;" />
+
+
+
+<img src=".\assets\azure-function-connectors.png" alt="Azure Functions Triggers" style="zoom:80%;" />
+
+Azure Functions is a serverless framework developed by Microsoft and provides rich capabilities. It allows you to run a small piece of code(called 'Functions') without worrying about application infrastructure. It leverages event-driven capabilities and runs the code whenever a supported trigger happens. It support multiple triggers such as HTTP, Blob, Queue, Service Bus, etc. I'll be deploying the prediction part of machine learning pipeline to Azure functions which will take an image as an input and throw back a prediction.
 
 ## Deep Neural Network
 
-faf
+<img src=".\assets\ai-ml-dl.png" alt="AI vs ML vs DL" style="zoom:80%;" />
+
+​							src: https://quantdare.com/what-is-the-difference-between-deep-learning-and-machine-learning/
+
+Deep Learning is subset of Machine learning in Artificial Intelligence. It is capable of learning features on its own compared to machine learning where features are identified manually. A neural network, is a technology built to simulate the activity of a human brain such as pattern recognition and its done through a set of layers. When we have multiple layers present in a neural network, its called as Deep Neural network. It mainly comprise of an input layer, multiple hidden layers and a final output layer. I'll be using a pre-trained deep neural network such as ResNet18 in this tutorial. Pre-trained means its already trained on large amount of images and we'll use that learning to make predictions for new images being given to the machine learning pipeline. Its called as [Transfer Learning](https://en.wikipedia.org/wiki/Transfer_learning).
+
+<img src=".\assets\ml-dl.png" alt="ML vs DL" style="zoom:80%;" />
+
+​							src: https://quantdare.com/what-is-the-difference-between-deep-learning-and-machine-learning/
 
 ## ML.Net
 
-faf
+<img src=".\assets\ml-dotnet.png" alt="ML.Net" style="zoom:80%;" />
+
+[**ML.Net**](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet) is a cross-platform framework from Microsoft for developing Machine learning models in the .Net ecosystem. It allows .Net developers to solve business problems using machine learning algorithms leveraging their preferred language such as C# or F#. It's highly scalable and used within Microsoft in many of its products such as Bing, Powerpoint, etc. I'll be using image classification algorithms for this tutorial.
 
 ## Application
 
-We are going to create an application that will classify an image as a cat or dog. First we'll create a local console application and thereafter move it to Azure function(Local and Cloud). The framework used for this exercise is ML.Net and language is C#.
+I am going to create an application that will classify an image based on [1000 classes](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a) present in [ImageNet](http://www.image-net.org/) dataset. First we'll create a local console application and thereafter move it to Azure function(Local and Cloud). The framework used for this exercise is ML.Net and language is C#.
 
 ### Prerequisites
 
@@ -30,632 +50,22 @@ We are going to create an application that will classify an image as a cat or do
 - REST Client - [Postman](https://www.postman.com/downloads/)
 - Serverless Deployment
   - Local : Azure function and Storage emulator
-  - Cloud: [Azure subscription (Only for cloud deployment to Azure Function)](https://azure.microsoft.com/en-in/) and Azure blobl storage
-
-### Dataset
-
-Dataset plays an important role in Machine learning and it's not only the count that matters, quality of image also matters. Quality such as size, lighting, blurriness etc. In order to keep things simple, I have considered few images only. As we are going use pre-trained model, we don't need much data for demonstration. This will give a pretty decent accuracy on the trained model. 
-
-Its a good practice to divide the dataset into train, test and validation dataset. 
-
-- **Train:** A train dataset comprise of major portion on which model is trained and features are extracted.
-- **Validation:**  A validation dataset is used to evaluate the accuracy of trained model. 
-- **Test:** A test dataset is used to make predictions using trained model.
-
-<img src=".\assets\data-split.png" alt="Data Split" style="zoom:50%;" />
-
-The dataset is further divided as per the classes to be predicted. In this case, its cat and dog.
-
-Dataset folder is structured as below.
-
-<img src=".\assets\dataset-folder-structure.png" alt="Dataset Folder Structure" style="zoom:80%;" />
-
-
-
-Sample Images
-
-<img src=".\assets\sample-images.png" alt="Sample Images" style="zoom:80%;" />
-
-
-
-### Image Classification - Console Application(C#)
-
-Now we'll create a console application for classifying an image as a cat or dog.
-
-Open Visual Studio and create a new C# console project and name it as 'ServerlessDNN'.
-
-Add a directory 'assets' and copy the 'Images' directory along with images of cats and dogs.
-
-<img src=".\assets\vs-images.png" alt="Images directory" style="zoom:80%;" />
-
-
-
-We'll create ML pipeline of building a ML model first, train it over existing data and evaluate it on validation data. Once we are convinced with the accuracy, we'll make predictions over test data.
-
-<img src=".\assets\ml-pipeline.png" alt="ML Pipeline" style="zoom:80%;" />
-
-1. **Build Model**
-
-   We need to define classes for our input data and predictions 
-
-   Create 'DataModels' directory and ImageData.cs file in the solution
-
-   **ImageData** holds information about the images to be loaded.
-
-   ```c#
-   using System;
-   using System.Collections.Generic;
-   using System.IO;
-   using System.Linq;
-   
-   namespace ServerlessDNN.DataModels
-   {
-       /// <summary>
-       /// Manages information about the images
-       /// </summary>
-       public class ImageData
-       {
-           /// <summary>
-           /// Fully qualified path of stored image
-           /// </summary>
-           public string ImagePath;
-   
-           /// <summary>
-           /// It is the category the image belongs to. This is the value to predict.
-           /// </summary>
-           public string Label;
-   
-           /// <summary>
-           /// Gets the collection images from the specified folder
-           /// </summary>
-           /// <param name="imageFolder"></param>
-           /// <returns></returns>
-           public static IEnumerable<ImageData> ReadFromFile(string imageFolder)
-           {
-               return Directory
-                   .GetFiles(imageFolder)
-                   .Where(filepath => Path.GetExtension(filepath) == ".jpg" || Path.GetExtension(filepath) == ".png")
-                   .Select(filePath => new ImageData {ImagePath = filePath, Label = Path.GetFileName(filePath)});
-           }
-       }
-   }
-   ```
-
-   **ModelInput** class defines the schema for input data and is defined as below
-
-   ```c#
-   using System;
-   
-   namespace ServerlessDNN.DataModels
-   {
-       /// <summary>
-       /// Defines schema for the input data
-       /// </summary>
-       public class ModelInput
-       {
-           /// <summary>
-           /// A byte[] representation of the image
-           /// </summary>
-           public byte[] Image { get; set; }
-   
-           /// <summary>
-           /// Numerical representation of the Label
-           /// </summary>
-           public UInt32 LabelAsKey { get; set; }
-   
-           /// <summary>
-           /// Fully qualified path of stored image
-           /// </summary>
-           public string ImagePath { get; set; }
-   
-           /// <summary>
-           /// It is the category the image belongs to. This is the value to predict.
-           /// </summary>
-           public string Label { get; set; }
-       }
-   }
-   ```
-
-   **ModelOutput** defines schema for the output data and is defined as below
-
-   ```c#
-   using System;
-   
-   namespace ServerlessDNN.DataModels
-   {
-       /// <summary>
-       /// Defines schema for the output data
-       /// </summary>
-       class ModelOutput
-       {
-           /// <summary>
-           /// Fully qualified path of stored image
-           /// </summary>
-           public string ImagePath { get; set; }
-   
-           /// <summary>
-           /// It is the category the image belongs to. This is the value to predict.
-           /// </summary>
-           public string Label { get; set; }
-   
-           /// <summary>
-           /// The value predicted by the model
-           /// </summary>
-           public string PredictedLabel { get; set; }
-       }
-   }
-   ```
-
-   We have data models and our solution should look like as below
-
-   <img src=".\assets\vs-images-models.png" alt="Data Models" style="zoom:80%;" />
-
-   
-
-   **Load data**
-
-   Navigate to Program.cs and declare below variable to access the path of assets just above the Main method
-
-   ```c#
-   private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../")); // x64
-   private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
-   private static string imagesRelativePath = Path.Combine(assetsRelativePath, "images");
-   private static string trainRelativePath = Path.Combine(imagesRelativePath, "train");
-   private static string testRelativePath = Path.Combine(imagesRelativePath, "test");
-   private static string valRelativePath = Path.Combine(imagesRelativePath, "val");
-   ```
-
-   I have added different regions within Main method for different stages in a ML pipeline as shown below. We'll fill each of these regions as we progress further. 
-
-   <img src=".\assets\main-build.png" alt="Build Model" style="zoom:80%;" />
-
-   
-
-   In order to load the data to be used within ML pipeline, we need to create MLContext that acts as a starting point of any Machine learning application using ML.Net
-
-   Add below nuget packages for Build Model step
-
-   - Microsoft.ML
-   - Microsoft.ML.ImageAnalytics
-
-   Steps to build the model
-
-   - Load data
-   - Initialize MLContext and shuffle data
-   - Preprocess data
-     - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
-     - LoadRawImageBytes - Loads image for training
-   - Fit - Applied preprocessing to the data
-   - Transform - Get the preprocessed data as a IDataView
-
-   
-
-   We create an helper method to create a ML pipeline to preprocess the data
-
-   ```c#
-   private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
-   {
-       var preProcessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
-           inputColumnName: "Label",
-           outputColumnName: "LabelAsKey")
-           .Append(mlContext.Transforms.LoadRawImageBytes(
-           outputColumnName: "Image",
-           imageFolder: dataPath,
-           inputColumnName: "ImagePath"));
-       return preProcessingPipeline;
-   }
-   ```
-
-   Code for building a model is as follows.
-
-   ```c#
-   #region Build
-   
-   Console.WriteLine("\n****** Build Model - Started *******");
-   
-   // Load train data 
-   var trainImages = ImageData.ReadFromFolder(trainRelativePath, true);
-   
-   // Initialize ML Pipeline
-   var mlContext = new MLContext(seed: 1);
-   IDataView trainData = mlContext.Data.LoadFromEnumerable(trainImages);
-   var shuffledData = mlContext.Data.ShuffleRows(trainData);
-   
-   // Preprocess data
-   var preprocessingPipeline = CreatePreprocessingPipeline(mlContext, trainRelativePath);
-   var preProcessedData = preprocessingPipeline.Fit(shuffledData).Transform(shuffledData);
-   
-   Console.WriteLine("\n****** Build Model - End *******");
-   #endregion
-   ```
-
-   
-
-2. **Train Model**
-
-   Now data is ready and model is ready to be trained. Training a deep neural network is the core of Machine learning task. During this task, a model processes the set of images provided and extract features such as edges, gradients, patterns and objects. These could be eyes, ears, nose etc. The model does a forward and a backward pass during and adjusts weights of the network in order to learn features better. 
-
-   ML.Net ImageClassifierTrainer provides a set of options that could be leveraged to fine tune the model training. Some of them are explained below. In order to keep the tutorial simple, I have used a minimal set of options.
-
-   Steps in training a model
-
-   - Add nuget packages
-     - Microsoft.ML.Vision
-     - SciSharp.TensorFlow.Redist
-   - ImageClassifierTrainer options
-     - FeatureColumnName: Input column name
-     - LabelColumnName : Name of column to be predicted
-     - Arch: Architecture to be used for training. Currently, ML.Net supports only Inception, MobileNet, Resnet.
-     - MetricCallback: Gives the progress of training.
-   - Create an ImageClassificationTrainer to train the model.
-   - Converting encoded predicted labels back to categorical value using MapKeyToValue transform.
-   - Finally train model using Fit method
-
-   ```c#
-   #region Train
-   
-   Console.WriteLine("\n****** Train Model - Started *******");
-   
-   var classifierOptions = new ImageClassificationTrainer.Options()
-   {
-       FeatureColumnName = "Image",
-       LabelColumnName = "LabelAsKey",
-       Arch = ImageClassificationTrainer.Architecture.ResnetV2101,
-       MetricsCallback = (metrics) => Console.WriteLine(metrics)
-   };
-   
-   var trainingPipeline = mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
-       .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-   
-   ITransformer trainedModel = trainingPipeline.Fit(preProcessedData);
-   
-   Console.WriteLine("\n****** Train Model - End *******");
-   
-   #endregion
-   ```
-
-   Training time might vary based on the selected architecture
-
-   Sample output
-
-   <img src=".\assets\dnn-training.png" alt="DNN Training" style="zoom:80%;" />
-
-   The numbers are not that great as we have supplied very small number images.
-
-   
-
-3. **Evaluate Model**
-
-   We'll evaluate the model on validation dataset in order to know how good is the model and if its ready to be consumed for making predictions. The steps in evaluating the model is as follows.
-
-   - Load Validation data
-   - Preprocess data
-     - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
-     - LoadRawImageBytes - Loads image for evaluating
-   - Evaluate Model using Validation data
-     - MulticlassClassification is used for evaluation and a metric will be returned
-     - Metrics has different parameters such as accuracy, loss that helps determins if a model is good or bad.
-   - Print Metrics
-
-   ```c#
-   private static void PrintMetrics(MulticlassClassificationMetrics metrics)
-   {
-       Console.WriteLine("\n............ Metrics ...........");
-       Console.WriteLine($"Macro Accuracy: {(metrics.MacroAccuracy * 100):0.##}%");
-       Console.WriteLine($"Micro Accuracy: {(metrics.MicroAccuracy * 100):0.##}%");
-       Console.WriteLine($"LogLoss is: {metrics.LogLoss:0.##}, value close to 0 is better");
-       Console.WriteLine(
-       $"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString("0.##")))}, value close to 0 is better");
-   }
-   
-   ```
-
-   
-
-   ```c#
-   #region Evaluate
-   
-   Console.BackgroundColor = ConsoleColor.DarkMagenta;
-   Console.WriteLine("\n****** Evaluate Model - Started *******");
-   
-   // Load validation data
-   var valImages = ImageData.ReadFromFolder(valRelativePath, true);
-   IDataView valData = mlContext.Data.LoadFromEnumerable(valImages);
-   var valShuffledData = mlContext.Data.ShuffleRows(valData);
-   
-   // Preprocess data
-   var valPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, valRelativePath);
-   var valDataPreprocessed = valPreprocessingPipeline.Fit(valShuffledData).Transform(valShuffledData);
-   IDataView valPredictionData = trainedModel.Transform(valDataPreprocessed);
-   
-   // Evaluate to generate metrics
-   MulticlassClassificationMetrics metrics =
-   mlContext.MulticlassClassification.Evaluate(valPredictionData,
-   labelColumnName: "LabelAsKey",
-   predictedLabelColumnName: "PredictedLabel");
-   
-   // Print Metrics
-   PrintMetrics(metrics);
-   
-   Console.ResetColor();
-   Console.WriteLine("\n****** Evaluate Model - End *******");
-   
-   #endregion
-   ```
-
-   Result:
-
-   <img src=".\assets\model-evaluation.png" alt="Model Evaluation" style="zoom:80%;" />
-
-   As seen from the result, model trained with just 10 images of each class(cat and dog), we got a fairly good accuracy of 90% and loss it also less. We'll now use this for predicting on images which model has never seen/trained on.
-
-   
-
-4. **Prediction**
-
-   Metrics may vary due to varied reasons such as volume of data, ML algorithm and problem domain. Once we are convinced numbers are good enough and model is ready for deployment to application, we need to do a final check on the model on the dataset it has never seen. This is achieved through PredictionEngine in ML.Net. The steps in predicting a model is as follows.
-
-   - Load Test dataset
-   - Preprocess data
-     - MapValueToKey - ML models expect input to be numerical, labels/class is string and needs to be converted to numeric
-     - LoadRawImageBytes - Loads image for predicting
-   - Create a Prediction Engine
-   - Perform prediction and display the result
-
-   ```c#
-   #region Predict
-   
-   Console.BackgroundColor = ConsoleColor.DarkBlue;
-   Console.WriteLine("\n****** Prediction - Started *******");
-   
-   // Load Data
-   var testImages = ImageData.ReadFromFolder(testRelativePath, true);
-   IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
-   var testShuffledData = mlContext.Data.ShuffleRows(testData);
-   
-   // Preprocess data
-   var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, testRelativePath);
-   var testDataPreprocessed = testPreprocessingPipeline.Fit(testShuffledData).Transform(testShuffledData);
-   IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
-   
-   // Create PredictionEngine and perform prediction
-   PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-   IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
-   
-   // Display Result
-   Console.WriteLine("\nClassifying multiple images");
-   foreach (var prediction in predictions)
-   {
-       string imageName = Path.GetFileName(prediction.ImagePath);
-       Console.WriteLine($"Image: {imageName} | Actual Value: {prediction.Label} | Predicted Value: {prediction.PredictedLabel}");
-   }
-   
-   Console.ResetColor();
-   Console.WriteLine("\n****** Prediction - End *******");
-   
-   #endregion
-   ```
-
-   Result:
-
-   <img src=".\assets\model-prediction.png" alt="Model Prediction" style="zoom:80%;" />
-
-   The results are phenomenal as we can see the mode did a good job of classifying a dog and cat with all correct predictions.
-
-   
-
-5. **Save Model**
-
-   This is the last step in ML pipeline and ML.Net has an API to save the trained model which can be further used in different applications such as console, web API and Azure functions.
-
-   Add model path to the list of directory/file paths
-
-   ```c#
-   private static string modelOutputPath = Path.Combine(assetsRelativePath, "model.zip");
-   ```
-
-   We'll use Model.Save() API to save the model to 'assets' folder with the name 'model.zip'
-
-   ```c#
-   #region Save Model
-   
-   Console.WriteLine("\n****** Save Model - Start *******");
-   
-   mlContext.Model.Save(
-       model: trainedModel,
-       inputSchema: null,
-       filePath: modelOutputPath);
-   
-   Console.WriteLine($"\nModel saved to : {modelOutputPath}");
-   #endregion
-   ```
-
-
-   <details>
-    <summary><h2>Click for full source</h2></summary>
-​    
-
-   ```c#
-   using System;
-   using System.Collections.Generic;
-   using System.IO;
-   using System.Linq;
-   using Microsoft.ML;
-   using Microsoft.ML.Data;
-   using Microsoft.ML.Vision;
-   using ServerlessDNN.DataModels;
-   
-   namespace ServerlessDNN
-   {
-       class Program
-       {
-           private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../")); // x64
-           private static string assetsRelativePath = Path.Combine(projectDirectory, "assets");
-           private static string imagesRelativePath = Path.Combine(assetsRelativePath, "images");
-           private static string trainRelativePath = Path.Combine(imagesRelativePath, "train");
-           private static string testRelativePath = Path.Combine(imagesRelativePath, "test");
-           private static string valRelativePath = Path.Combine(imagesRelativePath, "val");
-           private static string modelOutputPath = Path.Combine(assetsRelativePath, "model.zip");
-   
-           static void Main(string[] args)
-           {
-               Console.WriteLine("Welcome to Serverless Deep Neural Network example!!!");
-   
-               #region Build
-   
-               Console.WriteLine("\n****** Build Model - Started *******");
-   
-               // Load train data 
-               var trainImages = ImageData.ReadFromFolder(trainRelativePath, true);
-   
-               // Initialize ML Pipeline
-               var mlContext = new MLContext(seed: 1);
-               IDataView trainData = mlContext.Data.LoadFromEnumerable(trainImages);
-               var shuffledData = mlContext.Data.ShuffleRows(trainData);
-   
-               // Preprocess data
-               var preprocessingPipeline = CreatePreprocessingPipeline(mlContext, trainRelativePath);
-               var preProcessedData = preprocessingPipeline.Fit(shuffledData).Transform(shuffledData);
-   
-               Console.WriteLine("\n****** Build Model - End *******");
-               #endregion
-   
-               #region Train
-   
-               Console.WriteLine("\n****** Train Model - Started *******");
-   
-               var classifierOptions = new ImageClassificationTrainer.Options()
-               {
-                   FeatureColumnName = "Image",
-                   LabelColumnName = "LabelAsKey",
-                   Arch = ImageClassificationTrainer.Architecture.ResnetV2101,
-                   MetricsCallback = (metrics) => Console.WriteLine(metrics)
-               };
-   
-               var trainingPipeline = mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
-                   .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-   
-               ITransformer trainedModel = trainingPipeline.Fit(preProcessedData);
-   
-               Console.WriteLine("\n****** Train Model - End *******");
-   
-               #endregion
-   
-               #region Evaluate
-   
-               Console.BackgroundColor = ConsoleColor.DarkMagenta;
-               Console.WriteLine("\n****** Evaluate Model - Started *******");
-   
-               // Load validation data
-               var valImages = ImageData.ReadFromFolder(valRelativePath, true);
-               IDataView valData = mlContext.Data.LoadFromEnumerable(valImages);
-               var valShuffledData = mlContext.Data.ShuffleRows(valData);
-               
-               // Preprocess data
-               var valPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, valRelativePath);
-               var valDataPreprocessed = valPreprocessingPipeline.Fit(valShuffledData).Transform(valShuffledData);
-               IDataView valPredictionData = trainedModel.Transform(valDataPreprocessed);
-   
-               // Evaluate to generate metrics
-               MulticlassClassificationMetrics metrics =
-                   mlContext.MulticlassClassification.Evaluate(valPredictionData,
-                       labelColumnName: "LabelAsKey",
-                       predictedLabelColumnName: "PredictedLabel");
-   
-               // Print Metrics
-               PrintMetrics(metrics);
-   
-               Console.ResetColor();
-               Console.WriteLine("\n****** Evaluate Model - End *******");
-   
-               #endregion
-   
-               #region Predict
-   
-               Console.BackgroundColor = ConsoleColor.DarkBlue;
-               Console.WriteLine("\n****** Prediction - Started *******");
-   
-               // Load Data
-               var testImages = ImageData.ReadFromFolder(testRelativePath, true);
-               IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
-               var testShuffledData = mlContext.Data.ShuffleRows(testData);
-   
-               // Preprocess data
-               var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, testRelativePath);
-               var testDataPreprocessed = testPreprocessingPipeline.Fit(testShuffledData).Transform(testShuffledData);
-               IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
-   
-               // Create PredictionEngine and perform prediction
-               PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-               IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
-               
-               // Display Result
-               Console.WriteLine("\nClassifying multiple images");
-               foreach (var prediction in predictions)
-               {
-                   string imageName = Path.GetFileName(prediction.ImagePath);
-                   Console.WriteLine($"Image: {imageName} | Actual Value: {prediction.Label} | Predicted Value: {prediction.PredictedLabel}");
-               }
-   
-               Console.ResetColor();
-               Console.WriteLine("\n****** Prediction - End *******");
-   
-               #endregion
-   
-               #region Save Model
-   
-               Console.WriteLine("\n****** Save Model - Start *******");
-   
-               mlContext.Model.Save(
-                   model: trainedModel,
-                   inputSchema: null,
-                   filePath: modelOutputPath);
-   
-               Console.WriteLine($"\nModel saved to : {modelOutputPath}");
-               #endregion
-           }
-   
-           private static void PrintMetrics(MulticlassClassificationMetrics metrics)
-           {
-               Console.WriteLine("\n............ Metrics ...........");
-               Console.WriteLine($"Macro Accuracy: {(metrics.MacroAccuracy * 100):0.##}%");
-               Console.WriteLine($"Micro Accuracy: {(metrics.MicroAccuracy * 100):0.##}%");
-               Console.WriteLine($"LogLoss is: {metrics.LogLoss:0.##}, value close to 0 is better");
-               Console.WriteLine(
-                   $"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString("0.##")))}, value close to 0 is better");
-           }
-   
-           private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
-           {
-               var preProcessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
-                       inputColumnName: "Label",
-                       outputColumnName: "LabelAsKey")
-                   .Append(mlContext.Transforms.LoadRawImageBytes(
-                       outputColumnName: "Image",
-                       imageFolder: dataPath,
-                       inputColumnName: "ImagePath"));
-               return preProcessingPipeline;
-           }
-       }
-   }
-   ```
-
-   </details>
+  - Cloud: [Azure subscription (Only for cloud deployment to Azure Function)](https://azure.microsoft.com/en-in/) and Azure blob storage
 
 ### Image Classification - Serverless (Azure Function) - Local
 
-We have been successful in creating an ML pipeline and predicting the image for our problem statement of classifying the cat and dog images. This works fine in a console application, but we need our model to be accessible to other applications in order to be used for different use cases. In order to achieve this, we need to expose an endpoint(URL) and consume within a client application. Client applications should allow uploading an image and returning with a response having predicted value(cat or dog).
+As this is a classification problem where an image is given to the App and its class is predicted and returned as a response. In Azure, we can achieve this using different options available such as Azure App service, Azure Functions. Azure App service uses App service plan and is more expensive compared to Azure Function which is serverless and billed based on usage only. We need an Azure subscription in order to use Azure Functions. Limited time subscription can be obtained on registration at [Azure portal](https://azure.microsoft.com/en-in/free/).
 
-In Azure, we can achieve this using different options available such as Azure App service, Azure Functions. Azure App service uses App service plan and is more expensive compared to Azure Function which is serverless and billed based on usage only. We need an Azure subscription in order to use Azure Functions. Limited time subscription can be obtained on registration at [Azure portal](https://azure.microsoft.com/en-in/free/).
+I'll be using a pre-trained MobileNet model for predictions. In order to use this, donwload [Mobilenet](https://github.com/onnx/models/blob/master/vision/classification/mobilenet/model/mobilenetv2-7.onnx) and upload it to Azure blob storage both locally(storage emulator) and Cloud. I have stored it in 'serverlessdnnstorage' container and file name as **mobilenetv2-7.onnx**
 
 Steps in creating a image classification serverless function using Azure Function
 
 - Create Azure Function project using visual studio - Http Trigger
+- Add Http trigger function 'ClassifyImage' to the project
 - Add nuget packages
   - Microsoft.ML
-- Add Http trigger function to the project
-- Access model trained in ML pipeline in the function - model.zip
-  - Local - Access from system drive
+- Download MobileNet model from Blob and access it in function app
+  - Local - Storage emulator
   - Cloud - Upload to Azure blob storage and access it from there.
 - Load model
 - Make prediction and return result as a response
@@ -671,9 +81,9 @@ Let's create a new project and select 'Azure Function' from the project template
 
 In the next dialog, give a name to the project 'ServerlessDNNFunction' and click create.
 
-<img src=".\assets\azure-function-http-trigger.png" alt="Create project - Http Trigger" style="zoom:80%;" />
+<img src=".\assets\azure-function-http-trigger.png" alt="Create project - Http Trigger" style="zoom: 50%;" />
 
-This will add a new project to ServerlessDNN solution. Build the solution, just to ensure there are no errors. A default funtion(Function1) will be added.
+This will add a new project to ServerlessDNN solution. Build the solution, just to ensure there are no errors. A default function(Function1) will be added.
 
 Rename 'Function1.cs' file to ClassifyImage.cs and ensure it gets change in the function attribute as well as shown below.
 
@@ -684,7 +94,7 @@ namespace ServelessDNNFunction
     {
         [FunctionName("ClassifyImage")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -709,9 +119,9 @@ Press F5 to run the project and it should generate an endpoint like http://local
 
 <img src=".\assets\azure-function-endpoint.png" alt="Azure Function Endpoint" style="zoom:80%;" />
 
-Hit the url in browser and message 'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.' must be displayed.
-
-Remove 'get' from the HttpTrigger attribute of the function as we only need 'post' to upload an image.
+- Hit the url in browser and message 'This HTTP triggered function executed successfully. 
+- Remove 'get' from the HttpTrigger attribute of the function as we only need 'post' to upload an image.
+- Ensure AuthorizationLevel is Anonymous. Do not do this on Production.
 
 In order to upload an image from postman, create a POST request with above URL and select 'Body' as binary. Select a file by clicking on 'Select File' in the Body tab
 
@@ -719,377 +129,330 @@ In order to upload an image from postman, create a POST request with above URL a
 
 Add below code in Azure function to read and save uploaded image to temp directory
 
-- STEP-1: Save image to Temp path
-
-```c#
-string inputFileName = "inputimage.jpg";
-string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-string imagePath = Path.Join(tempPath, inputFileName);
-var inputStream = req.Body;
-
-// STEP-1: Save image to temp path
-try
-{
-    if (Directory.Exists(tempPath) == false)
-    {
-        Directory.CreateDirectory(tempPath);
-    }
-    await using (FileStream outputFileStream = new FileStream(imagePath, FileMode.Create))
-    {
-        await inputStream.CopyToAsync(outputFileStream);
-    }
-}
-catch (Exception e)
-{
-    log.LogError(e, e.Message);
-    throw;
-}
-```
-
-Now, we need to load the saved model 'model.zip'.  The size is file around 159MB. The file can be  accessed through disk or Storage Blob. In order to keep the experience same for both local and cloud, I have used [storage emulator](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator) for storing/reading the model. The model can be uploaded through [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-in/features/storage-explorer/).
-
-Please follow steps to create a container 'serverlessdnn' and upload model.zip
-
-Launch Azure Storage Explorer and select 'Local & Attached' account.
-
-<img src=".\assets\storage-explorer-create-blob.png" alt="Create Blob Container" style="zoom:80%;" />
-
-Select 'serverlessdnn' and click on Upload to upload model.zip
-
-<img src=".\assets\storage-explorer-upload.png" alt="Upload file to blob" style="zoom:80%;" />
-
-<img src=".\assets\storage-explorer-upload-dialog.png" alt="Upload Model" style="zoom:80%;" />
-
-Model will be uploaded to blob and available to be used.
-
-<img src=".\assets\storage-explorer-model.png" alt="Uploaded Model" style="zoom:80%;" />
-
-Navigate back to Azure function in visual studio. In order to load model we need to have below things
-
-- Storage blob connection string : double click on local.settings.json file in project explorer
-
-  <img src=".\assets\blob-storage-conn-string.png" alt="Blobl Storage Connection String" style="zoom:80%;" />
-
-  
-
-- Add input and output model schema(classes) in order to load model and make predictions along with InputData
-
-  
+- **STEP-1:** Save image to Temp path
 
   ```c#
-  using System;
+  string inputFileName = "inputimage.jpg";
+  string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+  string imagePath = Path.Join(tempPath, inputFileName);
+  var inputStream = req.Body;
   
-  namespace ServelessDNNFunction.DataModels
+  // STEP-1: Save image to temp path
+  try
   {
-      /// <summary>
-      /// Defines schema for the input data
-      /// </summary>
-      public class ModelInput
+      if (Directory.Exists(tempPath) == false)
       {
-          /// <summary>
-          /// A byte[] representation of the image
-          /// </summary>
-          public byte[] Image { get; set; }
-  
-          /// <summary>
-          /// Numerical representation of the Label
-          /// </summary>
-          public UInt32 LabelAsKey { get; set; }
-  
-          /// <summary>
-          /// Fully qualified path of stored image
-          /// </summary>
-          public string ImagePath { get; set; }
-  
-          /// <summary>
-          /// It is the category the image belongs to. This is the value to predict.
-          /// </summary>
-          public string Label { get; set; }
+          Directory.CreateDirectory(tempPath);
+      }
+      await using (FileStream outputFileStream = new FileStream(imagePath, FileMode.Create))
+      {
+          await inputStream.CopyToAsync(outputFileStream);
       }
   }
-  ```
-
-  ```c#
-  using System;
-  
-  namespace ServelessDNNFunction.DataModels
+  catch (Exception e)
   {
-      /// <summary>
-      /// Defines schema for the output data
-      /// </summary>
-      class ModelOutput
-      {
-          /// <summary>
-          /// Fully qualified path of stored image
-          /// </summary>
-          public string ImagePath { get; set; }
-  
-          /// <summary>
-          /// It is the category the image belongs to. This is the value to predict.
-          /// </summary>
-          public string Label { get; set; }
-  
-          /// <summary>
-          /// The value predicted by the model
-          /// </summary>
-          public string PredictedLabel { get; set; }
-      }
-  }
-  ```
-
-  ```c#
-  using System;
-  using System.Collections.Generic;
-  using System.IO;
-  using System.Linq;
-  
-  namespace ServerlessDNN.DataModels
-  {
-      /// <summary>
-      /// Manages information about the images
-      /// </summary>
-      public class ImageData
-      {
-          /// <summary>
-          /// Fully qualified path of stored image
-          /// </summary>
-          public string ImagePath;
-  
-          /// <summary>
-          /// It is the category the image belongs to. This is the value to predict.
-          /// </summary>
-          public string Label;
-  
-          /// <summary>
-          /// Gets the collection images from the specified folder
-          /// </summary>
-          /// <param name="imageFolder"></param>
-          /// <returns></returns>
-          public static IEnumerable<ImageData> ReadFromFile(string imageFolder)
-          {
-              return Directory
-                  .GetFiles(imageFolder)
-                  .Where(filepath => Path.GetExtension(filepath) == ".jpg" || Path.GetExtension(filepath) == ".png")
-                  .Select(filePath => new ImageData {ImagePath = filePath, Label = Path.GetFileName(filePath)});
-          }
-      }
+      log.LogError(e, e.Message);
+      throw;
   }
   ```
 
   
 
-- Add nuget package
+- **STEP-2:** Upload model to Blob storage
 
-  - Microsoft.ML 
+  Now, we need to load the saved model **mobilenetv2-7.onnx** (14MB).  The file can be  accessed through disk or Storage Blob. In order to keep the experience same for both local and cloud, I have used [storage emulator](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator) for storing/reading the model. The model can be uploaded through [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-in/features/storage-explorer/).
 
-  - Microsoft.ML.Vision
+  Please follow steps to create a container 'serverlessdnn' and upload **mobilenetv2-7.onnx**
 
-  - Microsoft.ML.ImageAnalytics
+  - Launch Azure Storage Explorer and select 'Local & Attached' account.
 
-  - SciSharp.TensorFlow.Redist
+    <img src=".\assets\storage-explorer-create-blob.png" alt="Create Blob Container" style="zoom:80%;" />
 
-  - Azure.Storage.Blobs
+  - Select 'serverlessdnn' and click on Upload to upload **mobilenetv2-7.onnx**
+
+    <img src=".\assets\storage-explorer-upload.png" alt="Upload file to blob" style="zoom:80%;" />
+
+    <img src=".\assets\storage-explorer-upload-dialog.png" alt="Upload Model" style="zoom:80%;" />
+
+  - Model will be uploaded to blob and available to be used.
+
+    ​	<img src=".\assets\storage-explorer-model.png" alt="Uploaded Model" style="zoom:80%;" />
 
     
 
-- STEP-2: Load Model
+- **STEP-3:** Load model from Blob Storage to Azure Function
 
-  We are going to load model from Azure storage blob. Open local.settings.json and replace with below content
+  - Navigate back to Azure function in visual studio. In order to load model we need to have below changes
 
-  ```javascript
-  {
-      "IsEncrypted": false,
-      "Values": {
+    <img src=".\assets\blob-storage-conn-string.png" alt="Blobl Storage Connection String" style="zoom:80%;" />
+
+  - Open local.settings.json and replace with below content
+
+    ```javascript
+    {
+        "IsEncrypted": false,
+        "Values": {
           "AzureWebJobsStorage": "UseDevelopmentStorage=true",
           "FUNCTIONS_WORKER_RUNTIME": "dotnet",
           "CONTAINER_NAME": "serverlessdnn",
-          "BLOB_FILE":  "model.zip"
+          "MODEL_FILE": "mobilenetv2-7.onnx"
       }
-  }
-  ```
+    }
+    ```
 
-  Add 'ReadModelFromBlob' method to read blob from container and return a stream of model.
+  - Add 'Azure.Storage.Blobs' nuget package
+
+  - Add below items at the start of ClassifyImage function
+
+    ```c#
+    // Load App Settings
+    var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME") ?? "serverlessdnn";
+    var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? "UseDevelopmentStorage=true";
+    var modelName = Environment.GetEnvironmentVariable("MODEL") ?? "mobilenetv2-7.onnx";
+    ```
+
+    
+
+  - Add 'ReadModelFromBlob' method to read blob from container and return a stream of model.
+
+    ```c#
+    private static Stream ReadModelFromBlob(ILogger log, string connectionString, string containerName, string modelName)
+    {
+        try
+        {
+            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+            container.CreateIfNotExists(PublicAccessType.Blob);
+            var blockBlob = container.GetBlockBlobClient(modelName);
+    
+            log.LogInformation($"Loading Model : {modelName}");
+    
+            var modelStream = new MemoryStream();
+            blockBlob.DownloadTo(modelStream);
+            return modelStream;
+        }
+        catch (Exception e)
+        {
+            log.LogError(e, e.Message);
+            throw;
+        }
+    }
+    ```
+
+  - We need to save this model file to temp path as ML.Net support loading of ONNX model from a path and not from the stream
+
+  - Add SaveModel(...) to save the model to temp path
+
+    ```c#
+    private static string SaveModel(ILogger log, string tempPath, string modelName, Stream modelStream)
+    {
+        string savedModelPath = Path.Combine(tempPath, modelName);
+    
+        try
+        {
+            using (var fileStream = File.Create(savedModelPath))
+            {
+                modelStream.Seek(0, SeekOrigin.Begin);
+                modelStream.CopyTo(fileStream);
+            }
+        }
+        catch (Exception e)
+        {
+            log.LogError(e, e.Message);
+            throw;
+        }
+    
+        return savedModelPath;
+    }
+    ```
+
+    
+
+  - Add below line to load the model from blob and save to temp path in ClassifyImage function
+
+    ```c#
+    // STEP-3: Load model from Blob storage and save to temp path
+    var modelStream = ReadModelFromBlob(log, connectionString, containerName, modelName);
+    var savedModelPath = SaveModel(log, tempPath, modelName, modelStream);
+    log.LogInformation($"Model saved to : {savedModelPath}");
+    ```
+
+  
+
+- **STEP-4:** Load ONNX model into ML.Net MLContext
+
+  - Add below nuget packages
+
+    - Microsoft.ML 
+    - Microsoft.ML.Vision
+
+    - Microsoft.ML.ImageAnalytics
+
+  - In order to load the ONNX model, we need to define schema for Model input and output.
+
+    - Add a new struct 'InputSettings' for holding attributes of image such as height and width. As we are working with MobileNet, it expects input image to be of size 224 x 224
+
+      ```c#
+      public struct ImageSettings
+      {
+          public const int imageHeight = 224;
+          public const int imageWidth = 224;
+      }
+      ```
+
+    - Add a new class 'ModelInput' which holds information about the input image that will be uploaded and its class as Label.
+
+      ```c#
+      public class ModelInput
+      {
+          [ColumnName("Label"), LoadColumn(0)]
+          public string Label { get; set; }
+      
+          [ImageType(ImageSettings.imageHeight, ImageSettings.imageWidth)]
+          public Bitmap ImageSource { get; set; }
+      }
+      ```
+
+      
+
+    - Add a new class 'ModelOutput' which holds information about the output image that will be uploaded and its class as Label.
+
+      ```c#
+      public class ModelOutput
+      {
+          // ColumnName attribute is used to change the column name from
+          // its default value, which is the name of the field.
+          [ColumnName("PredictedLabel")]
+          public String Prediction { get; set; }
+      
+          [ColumnName("mobilenetv20_output_flatten0_reshape0")]
+          public float[] Score { get; set; }
+      }
+      ```
+
+      Note attribute for Score is important. The value '**mobilenetv20_output_flatten0_reshape0**' is the name of output layer of the model. You can get it by opening mobilenetv2-7.onnx file using [Netron](https://github.com/lutzroeder/netron) application. As seen below input layer name is '**data**' and output layer name is '**mobilenetv20_output_flatten0_reshape0**'. 
+
+      Make a note of input and output layer names.
+
+      <img src=".\assets\netron-mobilenet.png" alt="Netron Output" style="zoom:80%;" />
+
+    - Now we'll create MLContext and load the ONNX model
+
+      - Add below nuget packages
+        - Microsoft.ML.OnnxTransformer
+      - For ML pipeline, three transformations are done
+        - ResizeImages -  It is to ensure the size of input size is 224 x224
+        - ExtractPixels - Its used to extract pixel values from the data specified in the column
+        - ApplyOnnxModel - It loads the ONNX model from the specified path
+      - Data is loaded in a lazy manner using MLContext. 
+      - In order to load the data into pipeline, Fit(...) method is called.
+
+      ```c#
+      // STEP-4: Load ONNX model into ML.Net MLContext
+      var modelInputName = "data";
+      var modelOutputName = "mobilenetv20_output_flatten0_reshape0";
+      
+      var mlContext = new MLContext(seed: 1);
+      
+      var emptyData = new List<ModelInput>();
+      var data = mlContext.Data.LoadFromEnumerable(emptyData);
+      
+      var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.imageWidth, imageHeight: ImageSettings.imageHeight, inputColumnName: nameof(ModelInput.ImageSource))
+          .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputName))
+          .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputName, inputColumnName: modelInputName));
+      
+      var model = pipeline.Fit(data);
+      
+      ```
+
+  
+
+- **STEP-5:** Prediction
+
+  In order to predict, we need to supply the image uploaded to Azure function and pass it to the ML pipeline. In ML.Net PrectionEngine has Predict(...) API to perform prediction on a single input image.
+
+  maxScore gives the predicted class
 
   ```c#
-  private static Stream ReadModelFromBlob()
+  // STEP-5: Prediction
+  Bitmap testImage;
+  using (var stream = new FileStream(imagePath, FileMode.Open))
   {
-      var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME");
-      var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-      var blobFile = Environment.GetEnvironmentVariable("BLOB_FILE");
-  
-      BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
-      container.CreateIfNotExists(PublicAccessType.Blob);
-  
-      var blockBlob = container.GetBlockBlobClient(blobFile);
-      var modelStream = new MemoryStream();
-      blockBlob.DownloadTo(modelStream);
-  
-      return modelStream;
+  testImage = (Bitmap)Image.FromStream(stream);
   }
-  ```
-
-  Now load the model with below call after saving the uploaded image
-
-  ```c#
-  // STEP-2: Load model
-  var modelStream = ReadModelFromBlob();
   
-  var mlContext = new MLContext(seed: 1);
-  var trainedModel = mlContext.Model.Load(modelStream, out var modelInputSchema);
-  ```
-
-- STEP-3: Load Data
-
-  ```c#
-  // STEP-3: Load Data
-  var testImages = ImageData.ReadFromFolder(tempPath, false);
-  IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
-  ```
-
-- STEP-4:  Preprocess Data
-
-  ```c#
-  // STEP-4: Preprocess data
-  var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, tempPath);
-  var testDataPreprocessed = testPreprocessingPipeline.Fit(testData).Transform(testData);
-  IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
-  ```
-
-- STEP-5: 
-
-  ```c#
-  // STEP-5: Create PredictionEngine and perform prediction
-  PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-  IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
+  ModelInput inputData = new ModelInput()
+  {
+  ImageSource = testImage
+  };
   
-  var predictedValue = predictions?.FirstOrDefault().PredictedLabel;
+  var predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
+  var prediction = predictionEngine.Predict(inputData);
+  var maxScore = Convert.ToInt16(prediction.Score?.Max());
   ```
 
-- Result
+- **STEP-6:** Return Predicted value as a response to Function API
+
+  ```c#
+  string responseMessage = $"Predicted: {maxScore}";
+  return new OkObjectResult(responseMessage);
+  ```
+
+  - Build the solution
+
+  - **ERROR** In case below error is reported, add **<RuntimeIdentifier>win-x64</RuntimeIdentifier>** to the ServerlessDNNFunction.csproj file
+
+    ```powershell
+    1>C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets(4364,5): warning MSB3026: Could not copy "C:\Users\<username>\.nuget\packages\microsoft.ml.onnxruntime\1.4.0\runtimes\osx-x64\native\libonnxruntime.dylib.dSYM\Contents\Resources\DWARF\libonnxruntime.dylib" to "bin\Debug\netcoreapp3.1\bin\runtimes\osx-x64\native\libonnxruntime.dylib.dSYM\Contents\Resources\DWARF\libonnxruntime.dylib". Beginning retry 1 in 1000ms. Could not find a part of the path 'bin\Debug\netcoreapp3.1\bin\runtimes\osx-x64\native\libonnxruntime.dylib.dSYM\Contents\Resources\DWARF\libonnxruntime.dylib'.
+    
+    ```
+
+    ```xml
+    <Project Sdk="Microsoft.NET.Sdk">
+      <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+        <Platforms>AnyCPU</Platforms>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.5.1" />
+        <PackageReference Include="Microsoft.ML" Version="1.5.1" />
+        <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="1.5.1" />
+        <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.4.0" />
+        <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="1.5.1" />
+        <PackageReference Include="Microsoft.ML.Vision" Version="1.5.1" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.7" />
+      </ItemGroup>
+      <ItemGroup>
+        <None Update="host.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+      </ItemGroup>
+    </Project>
+    
+    ```
+
+- **STEP-7:** Validate using REST client - Postman
+
+  - Run Project and hit the URL with an image of a cat from Postman as shown below
+
+    <img src=".\assets\rest-input-dog.png" alt="REST Client" style="zoom:80%;" />
+
+    
 
   - Input image
 
-    <img src=".\assets\input-cat.png" alt="Input - Cat" style="zoom:80%;" />
+    ![Input - Dog](.\assets\dog.jpg)
 
-  - Predicted: Cat
+  - Predicted: 212 (English setter)
 
-    <img src=".\assets\predicted-cat.png" alt="Predicted Cat" style="zoom:80%;" />
-
-Full Source code:
-
-```c#
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Mime;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Vision;
-using Newtonsoft.Json;
-using ServelessDNNFunction.DataModels;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs.Specialized;
-
-namespace ServelessDNNFunction
-{
-    public static class ClassifyImage
-    {
-        [FunctionName("ClassifyImage")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string inputFileName = "inputimage.jpg";
-            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            string imagePath = Path.Join(tempPath, inputFileName);
-            var inputStream = req.Body;
-
-            // STEP-1: Save image to temp path
-            try
-            {
-                if (Directory.Exists(tempPath) == false)
-                {
-                    Directory.CreateDirectory(tempPath);
-                }
-                await using (FileStream outputFileStream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await inputStream.CopyToAsync(outputFileStream);
-                }
-            }
-            catch (Exception e)
-            {
-                log.LogError(e, e.Message);
-                throw;
-            }
-
-            // STEP-2: Load model
-            var modelStream = ReadModelFromBlob();
-
-            var mlContext = new MLContext(seed: 1);
-            var trainedModel = mlContext.Model.Load(modelStream, out var modelInputSchema);
-
-            // STEP-3: Load Data
-            var testImages = ImageData.ReadFromFolder(tempPath, false);
-            IDataView testData = mlContext.Data.LoadFromEnumerable(testImages);
-
-            // STEP-4: Preprocess data
-            var testPreprocessingPipeline = CreatePreprocessingPipeline(mlContext, tempPath);
-            var testDataPreprocessed = testPreprocessingPipeline.Fit(testData).Transform(testData);
-            IDataView testPredictionData = trainedModel.Transform(testDataPreprocessed);
-
-            // STEP-5: Create PredictionEngine and perform prediction
-            PredictionEngine<ModelInput, ModelOutput> predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
-            IEnumerable<ModelOutput> predictions = mlContext.Data.CreateEnumerable<ModelOutput>(testPredictionData, reuseRowObject: true);
-
-            var predictedValue = predictions?.FirstOrDefault().PredictedLabel;
-
-            string responseMessage = $"Predicted: {predictedValue}";
-            return new OkObjectResult(responseMessage);
-        }
-
-        private static Stream ReadModelFromBlob()
-        {
-            var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME");
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-            var blobFile = Environment.GetEnvironmentVariable("BLOB_FILE");
-
-            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
-            container.CreateIfNotExists(PublicAccessType.Blob);
-
-            var blockBlob = container.GetBlockBlobClient(blobFile);
-            var modelStream = new MemoryStream();
-            blockBlob.DownloadTo(modelStream);
-
-            return modelStream;
-        }
-
-        private static EstimatorChain<ImageLoadingTransformer> CreatePreprocessingPipeline(MLContext mlContext, string dataPath)
-        {
-            var preProcessingPipeline = mlContext.Transforms.Conversion.MapValueToKey(
-                    inputColumnName: "Label",
-                    outputColumnName: "LabelAsKey")
-                .Append(mlContext.Transforms.LoadRawImageBytes(
-                    outputColumnName: "Image",
-                    imageFolder: dataPath,
-                    inputColumnName: "ImagePath"));
-            return preProcessingPipeline;
-        }
-    }
-}
-```
-
-
+    <img src=".\assets\predicted-212.png" alt="Predicted - 212" style="zoom:80%;" />
+    
+  - Predicted class is 212 which corresponds to 'English Setter', one of the dog breed. The prediction may not be very accurate as we have used MobileNet which doesn't have a very good accuracy. The reason of using it is small model size. Azure function can process small models only in consumption plan. If you have a high configuration of Azure Function, a large model could be used. Also, memory allocated in consumption plan is 1.5 GB only for the CPU.
 
 ### Image Classification - Serverless (Azure Function) - Cloud
 
@@ -1100,59 +463,80 @@ Now we are going to deploy this function app on Cloud(Azure). We need an Azure s
    1. Azure Subscription
    2. Azure Resource Group
 
-2. Deploying through Visual Studio
+2. Before we deploy function to cloud, please ensure **mobilenetv2-7.onnx** is saved to Azure Storage blob with the correct container name and blob name. Follow the steps mentioned for local, just replace local with Azure account.
 
-   Right click on ServerlessDNNFunction project and select Publish
+   <img src=".\assets\mobilenet-blob.png" alt="Blob Container - MobileNet" style="zoom:80%;" />
 
-   <img src=".\assets\azure-deploy-target.png" alt="Azure Deploy Target" style="zoom:80%;" />
+3. Deploying through Visual Studio
 
-   dsafa
+   - Right click on ServerlessDNNFunction project and select Publish
 
-   ​			<img src=".\assets\azure-deploy-target-os.png" alt="Target OS" style="zoom:80%;" />
+     <img src=".\assets\azure-deploy-target.png" alt="Azure Deploy Target" style="zoom:80%;" />
 
-   Login with your Azure credentials in the next dialog. Select subscription and Resource group. I'll create a new Azure Function.
+     <img src=".\assets\azure-deploy-target-os.png" alt="Target OS" style="zoom:80%;" />
 
-   Click on 'Create a new Azure Function' at the bottom.
+   - Login with your Azure credentials in the next dialog. Select subscription and Resource group. I'll create a new Azure Function. Click on 'Create a new Azure Function' at the bottom.
 
-   ​			<img src=".\assets\azure-deploy-rg-selection.png" alt="RG Selection" style="zoom:80%;" />
+     <img src=".\assets\azure-deploy-rg-selection.png" alt="RG Selection" style="zoom:80%;" />
+
+   - Fill in the details of new Azure function
+
+     <img src=".\assets\azure-deploy-fn-dialog.png" alt="Azure Function details" style="zoom:80%;" />
+
+   - If above step is successful, skip next step. If its unsuccessful and gives below error, navigate to previous dialog, select 'Specific target' and select 'Windows'. Hopefully this time Azure function will be created.
+
+     <img src=".\assets\azure-deploy-fn-error.png" alt="Azure Function error" style="zoom:80%;" />
+
+   - Successful creation of Azure function
+
+     <img src=".\assets\azure-deploy-fn-success.png" alt="Successful Function Creation" style="zoom:80%;" />
+
+   - Once published, Azure Function app is ready to use.
+
+   - **Error** In case below error is reported in Azure portal for the Azure function, go to Configuration -> General Settings -> Change 'Platform' to '64 Bit' and redeploy.
+
+     ```c#
+     System.IO.FileLoadException : Could not load file or assembly 'ServerlessDNNFunction, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'.
+     ```
+
+     <img src=".\assets\platform-settings-64-bit.png" alt="Platform Settings - 64 bit" style="zoom:80%;" />
+
+     
 
    
 
-   Fill in the details of new Azure function
+4. Validate using REST client - Postman
 
-   <img src=".\assets\azure-deploy-fn-dialog.png" alt="Azure Function details" style="zoom:80%;" />
+   - Run Project and hit the URL with an image of a cat from Postman as shown below
 
-   If above step is successful, skip next step. If its unsuccessful and gives below error, navigate to previous dialog, select 'Specific target' and select 'Windows'. Hopefully this time Azure function will be created.
+     <img src=".\assets\rest-input-dog-cloud.png" alt="Prediction - Dog" style="zoom:80%;" />
 
-   
+     
 
-   <img src=".\assets\azure-deploy-fn-error.png" alt="Azure Function error" style="zoom:80%;" />
+   - Input image
 
-   
+     ![Input - Dog](.\assets\dog.jpg)
 
-   Successful creation of Azure function
+   - Predicted: 212 (English setter)
 
-   <img src=".\assets\azure-deploy-fn-success.png" alt="Successful Function Creation" style="zoom:80%;" />
+     ![Predicted - 211](.\assets\predicted-212-cloud.png)
 
-   3. Upload model.zip to Storage blob in Azure and ensure name of container is same as in local.settings.json file
+     
 
-   4. Classify image using REST Client - Postman
-
-      
-
-   5. fdsa
-
-
+   - Predicted class is 212 which corresponds to 'English Setter', one of the dog breed. The prediction may not be very accurate as we have used MobileNet which doesn't have a very good accuracy. The reason of using it is small model size. Azure function can process small models only in consumption plan. If you have a high configuration of Azure Function, a large model could be used. Also, memory allocated in consumption plan is 1.5 GB only for the CPU.
 
 ## Conclusion
 
-In this tutorial, we saw how we can leverage transfer learning to create deep neural networks and consume it within .Net ecosystem. We learned lot of concepts such as Deep Neural networks, Serverless, Azure Functions and ML.Net and created a good enough application that combines lot of these things together. The accuracy and results are pretty good with such a small dataset. This strategy 
+In this tutorial, we saw how we can leverage transfer learning to create deep neural networks and consume it within .Net ecosystem. Later we deployed the azure function app to Azure cloud and saw how easy is to create an image classification application. We saw lot of concepts such as Deep Neural networks, Serverless, Azure Functions and ML.Net being utilized and combined together to create an amazing application. 
 
-
+Please share your feedback/comments through below channels.
 
 **Contact**
 
-
+Twitter : @praveenraghuvan\
+LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi \
+Github : https://github.com/praveenraghuvanshi \
+dev.to : https://dev.to/praveenraghuvanshi
 
 ## References
 
