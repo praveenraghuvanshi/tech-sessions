@@ -10,11 +10,13 @@
 
 **Type**: Recorded Video
 
+**Event URL** : https://anz.serverlessdays.io/
+
 **Abstract**: Have you ever wondered how does a machine is able to classify among different species of animals just by looking an image? Deep Neural Network simplifies and help classify the things. In this session, I will cover an introduction and concepts of Deep Neural Networks and show how to build a serverless image classification application using Microsoft Azure Functions and ML.Net framework. The implementation will be in C# language.
 
 **Resources**
 
-- [Deck](Serverless-Days-ANZ-2020.pptx)
+- [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/04092020-ServerlessDays-ANZ-2020/Serverless-Days-ANZ-2020.pptx)
 - [Source Code](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/04092020-ServerlessDays-ANZ-2020/src/ServerlessDNN)
 
 Contact
