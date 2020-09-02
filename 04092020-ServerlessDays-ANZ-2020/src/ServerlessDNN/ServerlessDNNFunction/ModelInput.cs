@@ -9,10 +9,7 @@ namespace ServerlessDNNFunction
 {
     public class ModelInput
     {
-        [ColumnName("Label"), LoadColumn(0)]
-        public string Label { get; set; }
-
-        [ImageType(ImageSettings.imageHeight, ImageSettings.imageWidth)]
+        [ImageType(ImageSettings.Height, ImageSettings.Width)]
         public Bitmap ImageSource { get; set; }
     }
 }

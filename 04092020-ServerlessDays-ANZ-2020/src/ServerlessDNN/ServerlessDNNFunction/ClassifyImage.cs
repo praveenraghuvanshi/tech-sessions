@@ -33,37 +33,16 @@ namespace ServelessDNNFunction
             var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? "UseDevelopmentStorage=true";
             var modelName = Environment.GetEnvironmentVariable("MODEL") ?? "mobilenetv2-7.onnx";
 
-            // STEP-1: Save image to temp path
-            string inputFileName = "inputimage.jpg";
-            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            string imagePath = Path.Join(tempPath, inputFileName);
-            var inputStream = req.Body;
+            // STEP-1: Upload model to Blob storage as it might have been already done. No action required here.
 
-            try
-            {
-                if (Directory.Exists(tempPath) == false)
-                {
-                    Directory.CreateDirectory(tempPath);
-                }
-                await using (FileStream outputFileStream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await inputStream.CopyToAsync(outputFileStream);
-                }
-            }
-            catch (Exception e)
-            {
-                log.LogError(e, e.Message);
-                throw;
-            }
+            // STEP-2: Load model from Blob storage and save to temp path
+            string tempPath = CreateTempDirectory(log);
 
-            // STEP-2: Upload model to Blob storage as it might have been already done. No action required here.
-
-            // STEP-3: Load model from Blob storage and save to temp path
             var modelStream = ReadModelFromBlob(log, connectionString, containerName, modelName);
             var savedModelPath = SaveModel(log, tempPath, modelName, modelStream);
             log.LogInformation($"Model saved to : {savedModelPath}");
 
-            // STEP-4: Load ONNX model into ML.Net MLContext
+            // STEP-3: Load ONNX model into ML.Net MLContext
             var modelInputName = "data";
             var modelOutputName = "mobilenetv20_output_flatten0_reshape0";
 
@@ -72,19 +51,15 @@ namespace ServelessDNNFunction
             var emptyData = new List<ModelInput>();
             var data = mlContext.Data.LoadFromEnumerable(emptyData);
 
-            var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.imageWidth, imageHeight: ImageSettings.imageHeight, inputColumnName: nameof(ModelInput.ImageSource))
+            var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.Width, imageHeight: ImageSettings.Height, inputColumnName: nameof(ModelInput.ImageSource))
                 .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputName))
                 .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputName, inputColumnName: modelInputName));
 
 
             var model = pipeline.Fit(data);
 
-            // STEP-5: Prediction
-            Bitmap testImage;
-            using (var stream = new FileStream(imagePath, FileMode.Open))
-            {
-                testImage = (Bitmap)Image.FromStream(stream);
-            }
+            // STEP-4: Prediction
+            Bitmap testImage = (Bitmap)Image.FromStream(req.Body);
 
             ModelInput inputData = new ModelInput()
             {
@@ -95,9 +70,28 @@ namespace ServelessDNNFunction
             var prediction = predictionEngine.Predict(inputData);
             var maxScore = Convert.ToInt16(prediction.Score?.Max());
 
-            // STEP-6: Return Predicted value as a response to Function API
+            // STEP-5: Return Predicted value as a response to Function API
             string responseMessage = $"Predicted: {maxScore}";
             return new OkObjectResult(responseMessage);
+        }
+
+        private static string CreateTempDirectory(ILogger log)
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            try
+            {
+                if (Directory.Exists(tempPath) == false)
+                {
+                    Directory.CreateDirectory(tempPath);
+                }
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, e.Message);
+                throw;
+            }
+
+            return tempPath;
         }
 
         private static Stream ReadModelFromBlob(ILogger log, string connectionString, string containerName, string modelName)
