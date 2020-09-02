@@ -6,7 +6,7 @@ namespace ServerlessDNNFunction
 {
     public struct ImageSettings
     {
-        public const int Height = 224;
-        public const int Width = 224;
+        public const int imageHeight = 224;
+        public const int imageWidth = 224;
     }
 }

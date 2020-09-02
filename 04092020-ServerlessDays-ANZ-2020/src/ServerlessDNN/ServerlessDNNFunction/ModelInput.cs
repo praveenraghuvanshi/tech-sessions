@@ -9,7 +9,7 @@ namespace ServerlessDNNFunction
 {
     public class ModelInput
     {
-        [ImageType(ImageSettings.Height, ImageSettings.Width)]
+        [ImageType(ImageSettings.imageHeight, ImageSettings.imageWidth)]
         public Bitmap ImageSource { get; set; }
     }
 }
