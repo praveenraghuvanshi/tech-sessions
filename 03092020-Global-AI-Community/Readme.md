@@ -23,8 +23,9 @@
 
 **Resources**
 
-- [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/04092020-ServerlessDays-ANZ-2020/Serverless-Days-ANZ-2020.pptx)
-- [Source Code](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/04092020-ServerlessDays-ANZ-2020/src/ServerlessDNN)
+- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community)
+- [Deck + Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/03092020-Global-AI-Community/Global-AI-Community.ipynb)
+- [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community/src/Classification(Binary))
 
 Contact
 
