@@ -26,6 +26,7 @@
 - [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community)
 - [Deck + Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/03092020-Global-AI-Community/Global-AI-Community.ipynb)
 - [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community/src/Classification(Binary))
+- [Covid-19 Data Analysis using C#](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-introduction-nlb)
 
 Contact
 
