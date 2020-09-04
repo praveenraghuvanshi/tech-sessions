@@ -1,4 +1,4 @@
-[![HitCount](http://hits.dwyl.com/praveenraghuvanshi/tech-sessions.svg)](http://hits.dwyl.com/praveenraghuvanshi/tech-sessions)
+![Hits](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2Fpraveenraghuvanshi%2Ftech-sessions)
 
 # Technical Sessions
 A repository of Technical sessions delivered
