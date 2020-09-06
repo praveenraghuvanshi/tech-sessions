@@ -41,7 +41,8 @@ public class Employee
 {    
     public Employee(string firstName, string lastName)
     {
-        FirstName = firstName; LastName = lastName;
+        FirstName = firstName; 
+        LastName = lastName;
     }    
     public string FirstName { get; set; }    
     public string LastName { get; set; }    
@@ -305,13 +306,16 @@ mlContext.Model.Save(model, splitDataView.TrainSet.Schema,"SentimentAnalysisMode
 
 # Resources
 
-- Github: 
+- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community)
+- [Deck + Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/03092020-Global-AI-Community/Global-AI-Community.ipynb)
+- [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community/src/Classification(Binary))
 
 # References
 
 - [How to Use Jupyter Notebook in 2020: A Beginner’s Tutorial](dataquest.io/blog/jupyter-notebook-tutorial/)
 - [.Net interactive](https://github.com/dotnet/interactive)
 - [Using ML.NET in Jupyter notebooks](https://devblogs.microsoft.com/cesardelatorre/using-ml-net-in-jupyter-notebooks/)
+- [RISE-Jupyter/IPython Slideshow Extension](https://rise.readthedocs.io/en/stable/)
 
 # Thank you
 
