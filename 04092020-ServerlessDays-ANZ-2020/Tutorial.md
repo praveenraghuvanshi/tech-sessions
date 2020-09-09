@@ -2,6 +2,8 @@
 
 The article is originally posted on my [*blog*](https://praveenraghuvanshi.github.io/computer%20vision/2020/09/09/serverless-dnn-azure-functions-mlnet.html)
 
+<img src=".\assets\dnn-mlnet-serverless.png" alt="Serverless DNN and ML.Net" style="zoom:80%;" />
+
 ## Introduction
 
 Have you ever wondered how does a machine classify among different species of animals just by looking at a image? How does a machine able to predict whether there is a cat or dog in an image? A rule based system might work for some images, however when a new or unseen image is given to the machine, there are chances prediction may go wrong. Also, rule based system might not scale for large number of images. Deep Neural Network comes as a rescue for such kind of problems and it really scales well. Deep Neural Network simplifies and help classify the things. In this tutorial, I will cover some concepts related to Deep Neural Networks and show how to build a serverless image classification application using Microsoft Azure Functions and ML.Net framework. The implementation will be in C# language. Before I jump into code, let's revisit some of the concepts used in this tutorial
