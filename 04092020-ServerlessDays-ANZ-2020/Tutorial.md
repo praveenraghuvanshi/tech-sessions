@@ -491,11 +491,11 @@ Now we are going to deploy this function app on Cloud(Azure). We need an Azure s
 
    - Input image
 
-     ![Input - Dog](.\assets\dog.jpg)
+     <img src=".\assets\dog.jpg" alt="Input - Dog" style="zoom:80%;" />
 
    - Predicted: 212 (English setter)
 
-     ![Predicted - 211](.\assets\predicted-212-cloud.png)
+     <img src=".\assets\predicted-212-cloud.png" alt="Predicted - 211" style="zoom:80%;" />
 
      
 
@@ -508,6 +508,11 @@ In this tutorial, we saw how we can leverage transfer learning to create deep ne
 >  I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
 Please share your feedback/comments through below channels.
+
+**Resources**
+
+- [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/04092020-ServerlessDays-ANZ-2020/Serverless-Days-ANZ-2020.pptx)
+- [Source Code](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/04092020-ServerlessDays-ANZ-2020/src/ServerlessDNN)
 
 **Contact**
 
