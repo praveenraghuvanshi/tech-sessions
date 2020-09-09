@@ -54,8 +54,7 @@ namespace ServelessDNNFunction
             var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.Width, imageHeight: ImageSettings.Height, inputColumnName: nameof(ModelInput.ImageSource))
                 .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputName))
                 .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputName, inputColumnName: modelInputName));
-
-
+            
             var model = pipeline.Fit(data);
 
             // STEP-4: Prediction
