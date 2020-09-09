@@ -60,6 +60,10 @@ I am going to create an application that will classify an image based on [1000 c
     - Blob Storage via Storage emulator - Machine learning Model
   - Cloud: [Azure subscription (Only for cloud deployment to Azure Function)](https://azure.microsoft.com/en-in/) and Azure blob storage
 
+### Cloud Architecture
+
+<img src=".\assets\cloud-architecture.png" alt="Cloud Architecture" style="zoom:80%;" />
+
 ### Image Classification - Serverless (Azure Function) - Local
 
 As this is a classification problem where an image is given to the App and its class is predicted. In Azure, we can achieve this using different options available such as Azure App service, Azure Functions. Azure App service uses App service plan and is more expensive compared to Azure Function which is serverless and billed based on usage only. We need an Azure subscription in order to use Azure Functions. Limited time subscription can be obtained by registring at [Azure portal](https://azure.microsoft.com/en-in/free/).
