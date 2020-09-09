@@ -505,14 +505,14 @@ Now we are going to deploy this function app on Cloud(Azure). We need an Azure s
 
 In this tutorial, we saw how we can leverage transfer learning to create deep neural networks and consume it within .Net ecosystem. Later we deployed the azure function app to Azure cloud and saw how easy is to create an image classification application. We saw lot of concepts such as Deep Neural networks, Serverless, Azure Functions and ML.Net being utilized and combined together to create an amazing application. 
 
->  I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
-
-Please share your feedback/comments through below channels.
-
 **Resources**
 
 - [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/04092020-ServerlessDays-ANZ-2020/Serverless-Days-ANZ-2020.pptx)
 - [Source Code](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/04092020-ServerlessDays-ANZ-2020/src/ServerlessDNN)
+
+>  I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
+
+Please share your feedback/comments through below channels.
 
 **Contact**
 
