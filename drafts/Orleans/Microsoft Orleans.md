@@ -74,3 +74,8 @@
 - https://stackshare.io/orleans/alternatives
 - https://softwareengineering.stackexchange.com/questions/398357/message-queue-with-multiple-consumers-locking-synchronous-on-a-field
 - https://www.gamasutra.com/blogs/AshkanSaeediMazdeh/20151008/255588/Creating_scalable_backends_for_games_using_open_source_Orleans_framework.php
+- https://gigi.nullneuron.net/gigilabs/a-dashboard-for-microsoft-orleans/
+- [Orleans Meetup 11 Visualising Orleans](https://www.youtube.com/watch?v=WiAX_eGEuyo)
+- https://slideplayer.com/slide/12688698/
+- https://www.slideshare.net/WinWire/build-distributed-highly-scalable-applications-in-net-using-microsoft-orleans
+- https://www.stellarsolutions.it/en/microsoft-orleans-presentation-part-1-theory/
