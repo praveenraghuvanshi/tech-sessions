@@ -86,4 +86,7 @@
 - [Getting Started with Microsoft Orleans](https://dev.to/kritner/getting-started-with-microsoft-orleans-1765)
 - Slides
   - [Microsoft Project Orleans](https://slideplayer.com/slide/4656419/)
-- dfasd
+- Articles
+  - [The Curse of the A-word](https://docs.temporal.io/blog/sergey-the-curse-of-the-a-word/)
+  - [What is the Actor Model & When Should You Use it?](https://mattferderer.com/what-is-the-actor-model-and-when-should-you-use-it)
+- fads
