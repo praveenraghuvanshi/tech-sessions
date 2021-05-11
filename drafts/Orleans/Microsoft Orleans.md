@@ -79,3 +79,6 @@
 - https://slideplayer.com/slide/12688698/
 - https://www.slideshare.net/WinWire/build-distributed-highly-scalable-applications-in-net-using-microsoft-orleans
 - https://www.stellarsolutions.it/en/microsoft-orleans-presentation-part-1-theory/
+- [Project Orleans - Actor Model framework](https://www.slideshare.net/nmackenzie/project-orleans)
+- [Akka.net versus microsoft orleans](https://www.slideshare.net/BillTulloch/akkanet-versus-microsoft-orleans)
+- [Orleans – a “cloud native” runtime built for #azure](https://www.slideshare.net/Brisebois/orleans-a-cloud-native-runtime-built-for-azure)
