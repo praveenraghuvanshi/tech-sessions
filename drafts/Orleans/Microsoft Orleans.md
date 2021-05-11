@@ -82,3 +82,8 @@
 - [Project Orleans - Actor Model framework](https://www.slideshare.net/nmackenzie/project-orleans)
 - [Akka.net versus microsoft orleans](https://www.slideshare.net/BillTulloch/akkanet-versus-microsoft-orleans)
 - [Orleans – a “cloud native” runtime built for #azure](https://www.slideshare.net/Brisebois/orleans-a-cloud-native-runtime-built-for-azure)
+- [Distributed caching with Microsoft Orleans](https://mcguirev10.com/2019/09/18/distributed-caching-with-microsoft-orleans.html)
+- [Getting Started with Microsoft Orleans](https://dev.to/kritner/getting-started-with-microsoft-orleans-1765)
+- Slides
+  - [Microsoft Project Orleans](https://slideplayer.com/slide/4656419/)
+- dfasd
