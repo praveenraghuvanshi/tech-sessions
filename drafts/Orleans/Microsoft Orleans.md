@@ -89,4 +89,14 @@
 - Articles
   - [The Curse of the A-word](https://docs.temporal.io/blog/sergey-the-curse-of-the-a-word/)
   - [What is the Actor Model & When Should You Use it?](https://mattferderer.com/what-is-the-actor-model-and-when-should-you-use-it)
+  - [Difference in definition of Actors vs Threads? ](https://stackoverflow.com/questions/47248820/difference-in-definition-of-actors-vs-threads)
+  - [Introduction to Akka Actor Model](https://tech401.com/2018/05/31/2018/2018-05-31-introduction_to_akka_model/)
 - fads
+
+
+
+
+
+
+
+![image-20210512173505309](C:\Users\praghuvanshi\AppData\Roaming\Typora\typora-user-images\image-20210512173505309.png)
