@@ -86,11 +86,13 @@
 - [Getting Started with Microsoft Orleans](https://dev.to/kritner/getting-started-with-microsoft-orleans-1765)
 - Slides
   - [Microsoft Project Orleans](https://slideplayer.com/slide/4656419/)
+  - [Akka.net versus microsoft orleans](https://www.slideshare.net/BillTulloch/akkanet-versus-microsoft-orleans)
 - Articles
   - [The Curse of the A-word](https://docs.temporal.io/blog/sergey-the-curse-of-the-a-word/)
   - [What is the Actor Model & When Should You Use it?](https://mattferderer.com/what-is-the-actor-model-and-when-should-you-use-it)
   - [Difference in definition of Actors vs Threads? ](https://stackoverflow.com/questions/47248820/difference-in-definition-of-actors-vs-threads)
   - [Introduction to Akka Actor Model](https://tech401.com/2018/05/31/2018/2018-05-31-introduction_to_akka_model/)
+  - [A look at Microsoft Orleans through Erlang-tinted glasses](https://theburningmonk.com/2014/12/a-look-at-microsoft-orleans-through-erlang-tinted-glasses/)
 - fads
 
 
