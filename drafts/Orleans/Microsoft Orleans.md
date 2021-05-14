@@ -93,7 +93,13 @@
   - [Difference in definition of Actors vs Threads? ](https://stackoverflow.com/questions/47248820/difference-in-definition-of-actors-vs-threads)
   - [Introduction to Akka Actor Model](https://tech401.com/2018/05/31/2018/2018-05-31-introduction_to_akka_model/)
   - [A look at Microsoft Orleans through Erlang-tinted glasses](https://theburningmonk.com/2014/12/a-look-at-microsoft-orleans-through-erlang-tinted-glasses/)
-- fads
+  - [Getting started with Microsoft Orleans](https://www.michalbialecki.com/2018/03/05/getting-started-microsoft-orleans/)
+  - [Microsoft Orleans – is it fast?](https://www.michalbialecki.com/2018/12/07/microsoft-orleans-is-it-fast/)
+- Videos
+  - [Introduction to Microsoft Orleans - CodeWithStu](https://www.youtube.com/watch?v=yM-gpuw1uhM)
+  - [Stairway to Cloud: Orleans Framework for building Halo-scale systems](https://www.youtube.com/watch?v=7CWEc8dBH38&t=412s)
+  - [Josef Burant: MS Orleans in Real World Application](https://www.youtube.com/watch?v=hI9hjwwaWBw)
+- fd
 
 
 
