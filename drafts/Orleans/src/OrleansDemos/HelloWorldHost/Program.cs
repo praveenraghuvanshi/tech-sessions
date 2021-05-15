@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -28,10 +29,12 @@ namespace HelloWorldHost
         private static async Task<ISiloHost> StartSiloAsync()
         {
             // Define cluster configuration
+            // Please note, the dashboard registers its services and grains using ConfigureApplicationParts which disables the automatic discovery of grains in Orleans. To enable automatic discovery of the grains of the original project, change the configuration to:
             var builder = new SiloHostBuilder()
                 .UseLocalhostClustering()
-                .ConfigureLogging(logging => logging.AddConsole())
-                .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback);
+                .ConfigureApplicationParts(parts => parts.AddFromApplicationBaseDirectory())
+                .UseDashboard()
+                .ConfigureLogging(logging => logging.AddConsole());
 
             var host = builder.Build();
             await host.StartAsync();

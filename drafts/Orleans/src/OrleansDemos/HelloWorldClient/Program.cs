@@ -38,7 +38,7 @@ namespace HelloWorldClient
 
         private static async Task DoClientWork(IClusterClient client)
         {
-            var friend = client.GetGrain<IHelloWorld>("temp");
+            var friend = client.GetGrain<IHelloWorld>("temp-2");
             Console.WriteLine("Enter a message to be sent to grain");
             var message = Console.ReadLine();
 
