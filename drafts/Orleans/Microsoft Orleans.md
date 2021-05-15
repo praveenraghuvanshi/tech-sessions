@@ -98,6 +98,9 @@
   - [Microsoft Orleans was born for scalability | by Peter Herbel | GetTech Blog | Medium](https://medium.com/gettech-blog/microsoft-orleans-was-born-for-scalability-f5654aaa23c1)
   - [Encloudify On Azure: Fine-graining your Orleans Grains inside the IoT universe](http://encloudify.blogspot.com/2014/05/fine-graining-your-orleans-grains.html)
   - [Building planet-scale, distributed apps with Google Cloud, Kubernetes, Microsoft Orleans, .Net Core & Xamarin Forms (Part 1/2)](https://www.microland.com/blogs/distributed-apps-with-google-cloud-1)
+  - [Long-running tasks in Orleans dotnet](https://pcholko.com/posts/2020-06-07/orleans-long-running-tasks/)
+  - [Orleans best practices for production usage](https://github.com/dotnet/orleans/issues/6178#)
+  - [Orleans Best Practices](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/Orleans20Best20Practices.pdf)
 - Videos
   - [Introduction to Microsoft Orleans - CodeWithStu](https://www.youtube.com/watch?v=yM-gpuw1uhM)
   - [Stairway to Cloud: Orleans Framework for building Halo-scale systems](https://www.youtube.com/watch?v=7CWEc8dBH38&t=412s)
