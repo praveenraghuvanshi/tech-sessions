@@ -1,14 +1,23 @@
 ﻿using System.Threading.Tasks;
 using HelloWorldInterfaces;
 using Orleans;
+using Orleans.Providers;
 
 namespace HelloWorld
 {
-    public class HelloWorld : Grain, IHelloWorld
+    [StorageProvider(ProviderName = "MongoDBStore")]
+    public class HelloWorld : Grain<HelloState>, IHelloWorld
     {
-        public Task<string> SayHello(string greeting)
+        public async Task<string> SayHello(string greeting)
         {
-            return Task.FromResult($"Hello World Grain says: {greeting}!!!");
+            var counter = this.State.Counter++;
+            await this.WriteStateAsync();
+            return $"Hello World Grain says: {greeting}, times - {counter}!!!";
         }
+    }
+
+    public class HelloState
+    {
+        public int Counter { get; set; }
     }
 }

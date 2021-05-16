@@ -8,6 +8,8 @@ namespace HelloWorldClient
 {
     class Program
     {
+        private static string connectionString = "mongodb://localhost/OrleansTestApp";
+
         static int Main(string[] args)
         {
             return RunMainAsync().Result;
@@ -28,6 +30,11 @@ namespace HelloWorldClient
         {
             IClusterClient client = new ClientBuilder()
                 .UseLocalhostClustering()
+                .UseMongoDBClient(connectionString)
+                .UseMongoDBClustering(options =>
+                {
+                    options.DatabaseName = "OrleansTestApp";
+                })
                 .ConfigureLogging(logging => logging.AddConsole())
                 .Build();
 
