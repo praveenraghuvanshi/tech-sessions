@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Orleans;
 
-namespace HelloWorldInterfaces
+namespace HelloWorld.Interfaces
 {
     public interface IHelloWorld : IGrainWithStringKey
     {
-        Task<string> SayHello(string greeting);
+        Task<string> SayHello(string message);
     }
 }

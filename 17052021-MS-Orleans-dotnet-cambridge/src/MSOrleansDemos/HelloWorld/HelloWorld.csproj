@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HelloWorldInterfaces\HelloWorldInterfaces.csproj" />
+    <ProjectReference Include="..\HelloWorld.Interfaces\HelloWorld.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
