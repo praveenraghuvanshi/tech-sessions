@@ -17,7 +17,10 @@ namespace HelloWorld.Host
         {
             var hostBuilder = new SiloHostBuilder()
                 .UseLocalhostClustering()
-                .ConfigureLogging(logging => logging.AddConsole());
+                .ConfigureApplicationParts(parts => parts.AddFromApplicationBaseDirectory())
+                .ConfigureLogging(logging => logging.AddConsole())
+                .UseDashboard();
+                
 
             var host = hostBuilder.Build();
             
