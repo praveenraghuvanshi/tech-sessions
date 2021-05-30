@@ -105,6 +105,7 @@
   - [Introduction to Microsoft Orleans - CodeWithStu](https://www.youtube.com/watch?v=yM-gpuw1uhM)
   - [Stairway to Cloud: Orleans Framework for building Halo-scale systems](https://www.youtube.com/watch?v=7CWEc8dBH38&t=412s)
   - [Josef Burant: MS Orleans in Real World Application](https://www.youtube.com/watch?v=hI9hjwwaWBw)
+  - [Orleans Meetup 17 - Orleans and Kubernetes - YouTube](https://www.youtube.com/watch?v=dWwxKHclco8)
 - fd
 
 
