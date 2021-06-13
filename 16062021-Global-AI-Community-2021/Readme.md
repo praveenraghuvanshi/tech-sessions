@@ -1,32 +1,41 @@
 
 
-<img src=".\assets\global-ai-community-praveen.png" alt="Global AI talks" style="zoom:80%;" />
 
-<img src=".\assets\global-ai-community-praveen-host.png" alt="Sammy and Praveen" style="zoom:80%;" />
 
-**Title** : Machine Learning using C# on Jupyter Notebook
+<img src="assets\blobal-ai-tour-banner.png" alt="Global AI Tour" style="zoom:80%;" />
 
-**Date** : 03-September-2020
 
-**Event**: Global AI Talks
+
+<img src="assets\praveen-session.png" alt="Praveen Session" style="zoom:80%;" />
+
+<img src="assets\event-speaker.png" alt="Event Speakers" style="zoom:80%;" />
+
+
+
+**Title** : Cricket Analytics and Prediction using ML.Net
+
+**Date** : 16-June-2021
+
+**Event**: [Global AI on Tour](https://tour.globalai.live/)
 
 **Type**: Live 
 
 **Event URL** :
 
-- https://globalai.community/ai-talks/ai-talks-with-praveen-raghuvanshi
-- https://www.meetup.com/Global-AI-Channel/events/272512604/
+- Webpage: https://tour.globalai.live/
+- Program: https://tour.globalai.live/program/
+- Speakers: https://tour.globalai.live/speakers/
 
-**Youtube Live URL:** https://youtu.be/qVwviaNgQ6U
+**Youtube Live URL:** TBU
 
-**Abstract**: The Jupyter Notebook is an open-source web application that you can use to create and share documents that contain live code, equations, visualizations, and text. It's very famous in Data Science and Machine Learning community. It has diverse support for different languages such as Python, Julia, R, etc. Recently, Microsoft added support for C#/F# making it accessible to lots of .Net developers. In this talk, I'll talk about the Jupyter notebook, C# on Jupyter notebook with some examples.
+**Abstract**: Cricket, a game of bat and ball is one of the most popular games and played in varied formats. It's a game of numbers with each match generating a plethora of data about players and matches. This data is used by analysts and data scientists to uncover meaningful insights and forecast about matches and players performance. In this session, I'll be performing some analytics and prediction on the cricket data using Microsoft ML.Net framework and C#.
 
 **Resources**
 
-- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community)
-- [Deck + Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/03092020-Global-AI-Community/Global-AI-Community.ipynb)
-- [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/03092020-Global-AI-Community/src/Classification(Binary))
-- [Covid-19 Data Analysis using C#](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-introduction-nlb)
+- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/16062021-Global-AI-Community-2021)
+- [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/cricket-analytics.pdf)
+- [Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/CricketAnalysis.ipynb)
+- [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/16062021-Global-AI-Community-2021/src/SportAnalytics)
 
 Contact
 
