@@ -1,0 +1,3 @@
+match_id,season,start_date,venue,innings,ball,batting_team,bowling_team,striker,non_striker,bowler,runs_off_bat,extras,wides,noballs,byes,legbyes,penalty,wicket_type,player_dismissed,other_wicket_type,other_player_dismissed
+566927,2013,2013-06-27,Kennington Oval,1,0.1,England,New Zealand,MJ Lumb,AD Hales,MJ McClenaghan,2,0,,,,,,,,,
+566927,2013,2013-06-27,Kennington Oval,1,0.2,England,New Zealand,MJ Lumb,AD Hales,MJ McClenaghan,0,0,,,,,,caught,MJ Lumb,,
