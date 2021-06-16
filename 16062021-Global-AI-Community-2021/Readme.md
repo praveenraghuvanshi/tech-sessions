@@ -46,3 +46,29 @@ dev.to : https://dev.to/praveenraghuvanshi
 
 I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
+
+
+## Results
+
+### Web App
+
+ Link : [AI-Endeavour ](https://aiendeavour.azurewebsites.net/home)
+
+
+
+<img src="assets\cricket-prediction.gif" style="zoom:80%;" />
+
+
+
+### Jupyter Notebook
+
+Link: https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/CricketAnalysis.ipynb
+
+<img src="assets\metrics-prediction.png" alt="metrics-prediction" style="zoom:80%;" />
+
+
+
+### Model Builder
+
+<img src="assets\ml-builder-metrics.png" style="zoom:80%;" />
+
