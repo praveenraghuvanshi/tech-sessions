@@ -26,7 +26,7 @@
 - Program: https://tour.globalai.live/program/
 - Speakers: https://tour.globalai.live/speakers/
 
-**Youtube Live URL:** TBU
+**Youtube URL:** https://youtu.be/KoTCYAiwvZw
 
 **Abstract**: Cricket, a game of bat and ball is one of the most popular games and played in varied formats. It's a game of numbers with each match generating a plethora of data about players and matches. This data is used by analysts and data scientists to uncover meaningful insights and forecast about matches and players performance. In this session, I'll be performing some analytics and prediction on the cricket data using Microsoft ML.Net framework and C#.
 
