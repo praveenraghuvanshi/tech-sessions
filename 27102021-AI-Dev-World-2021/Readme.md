@@ -1,6 +1,6 @@
-<img src=".\assets\serverless-anz-20202-logo.png" alt="Serverless days" style="zoom:80%;" />
+<img src=".\assets\ai-dev-world-home.png" alt="AI Dev World 2021" style="zoom:80%;" />
 
-<img src=".\assets\serverless-anz-20202-praveen-session.png" alt="Serverless DNN" style="zoom:80%;" />
+<img src=".\assets\ai-dev-world-praveen.png" alt="Serverless DNN" style="zoom:80%;" />
 
 **Title** : Serverless Deep Neural Network with Azure Functions and ML.Net
 
