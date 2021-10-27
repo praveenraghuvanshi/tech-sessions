@@ -1,0 +1,9 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+      "CONTAINER_NAME": "serverlessdnn",
+      "MODEL_FILE": "mobilenetv2-7.onnx"
+  }
+}
