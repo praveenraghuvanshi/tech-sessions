@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Image;
-using Newtonsoft.Json;
 using ServerlessDNNFunction;
 using System.Drawing;
 using System.Linq;
@@ -28,11 +27,15 @@ namespace ServelessDNNFunction
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
+            #region App Settings
+            
             // Load App Settings
             var containerName = Environment.GetEnvironmentVariable("CONTAINER_NAME") ?? "serverlessdnn";
             var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? "UseDevelopmentStorage=true";
             var modelName = Environment.GetEnvironmentVariable("MODEL") ?? "mobilenetv2-7.onnx";
+            #endregion
 
+            #region Load Model
             // STEP-1: Upload model to Blob storage as it might have been already done. No action required here.
 
             // STEP-2: Load model from Blob storage and save to temp path
@@ -41,7 +44,9 @@ namespace ServelessDNNFunction
             var modelStream = ReadModelFromBlob(log, connectionString, containerName, modelName);
             var savedModelPath = SaveModel(log, tempPath, modelName, modelStream);
             log.LogInformation($"Model saved to : {savedModelPath}");
+            #endregion
 
+            #region Load model into ML.Net context
             // STEP-3: Load ONNX model into ML.Net MLContext
             var modelInputName = "data";
             var modelOutputName = "mobilenetv20_output_flatten0_reshape0";
@@ -54,9 +59,14 @@ namespace ServelessDNNFunction
             var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.Width, imageHeight: ImageSettings.Height, inputColumnName: nameof(ModelInput.ImageSource))
                 .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputName))
                 .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputName, inputColumnName: modelInputName));
-            
-            var model = pipeline.Fit(data);
 
+            #endregion
+
+            #region Train
+            var model = pipeline.Fit(data);
+            #endregion
+
+            #region Prediction
             // STEP-4: Prediction
             Bitmap testImage = (Bitmap)Image.FromStream(req.Body);
 
@@ -68,10 +78,13 @@ namespace ServelessDNNFunction
             var predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
             var prediction = predictionEngine.Predict(inputData);
             var maxScore = Convert.ToInt16(prediction.Score?.Max());
+            #endregion
 
+            #region Response
             // STEP-5: Return Predicted value as a response to Function API
             string responseMessage = $"Predicted: {maxScore}";
             return new OkObjectResult(responseMessage);
+            #endregion
         }
 
         private static string CreateTempDirectory(ILogger log)
