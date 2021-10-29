@@ -71,7 +71,7 @@ namespace ServelessDNNFunction
             // STEP-4: Prediction
             Bitmap testImage = (Bitmap)Image.FromStream(req.Body);
 
-            ModelInput inputData = new ModelInput()
+            ModelInput inputData = new ModelInput
             {
                 ImageSource = testImage
             };
