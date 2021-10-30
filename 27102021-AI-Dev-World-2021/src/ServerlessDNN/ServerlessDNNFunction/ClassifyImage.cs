@@ -49,17 +49,17 @@ namespace ServelessDNNFunction
 
             #region Load model into ML.Net context
             // STEP-3: Load ONNX model into ML.Net MLContext
-            var modelInputName = "data";
-            var modelOutputName = "mobilenetv20_output_flatten0_reshape0";
+            var modelInputColumnName = "data";
+            var modelOutputColumnName = "mobilenetv20_output_flatten0_reshape0";
 
             var mlContext = new MLContext(seed: 1);
 
             var emptyData = new List<ModelInput>();
             var data = mlContext.Data.LoadFromEnumerable(emptyData);
 
-            var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputName, imageWidth: ImageSettings.Width, imageHeight: ImageSettings.Height, inputColumnName: nameof(ModelInput.ImageSource))
-                .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputName))
-                .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputName, inputColumnName: modelInputName));
+            var pipeline = mlContext.Transforms.ResizeImages(resizing: ImageResizingEstimator.ResizingKind.Fill, outputColumnName: modelInputColumnName, imageWidth: ImageSettings.Width, imageHeight: ImageSettings.Height, inputColumnName: nameof(ModelInput.ImageSource))
+                .Append(mlContext.Transforms.ExtractPixels(outputColumnName: modelInputColumnName))
+                .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: savedModelPath, outputColumnName: modelOutputColumnName, inputColumnName: modelInputColumnName));
 
             #endregion
 
