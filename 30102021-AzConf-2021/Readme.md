@@ -4,7 +4,7 @@
 
 <img src="assets\azure-conference-2021-agenda.png" alt="Az Conf 2021 Agenda" style="zoom:80%;" />
 
-
+<img src="assets\badge" alt="AzConf Badge" style="zoom:80%;" />
 
 **Title** : Serverless Deep Neural Network with Azure Functions and ML.Net
 
@@ -16,7 +16,9 @@
 
 **Event URL** : https://azconf.dev/
 
-**Video**: Coming soon
+**Video**: [Youtube](https://www.youtube.com/watch?v=6YxzsAvzcC8) 51:35 onwards 
+
+**Certifcate**: https://badge.azconf.dev/badge/904f8584-756a-4494-818c-a109d4493fea
 
 **Abstract**: How does a machine classify different species of animals just by looking at an image? Computer Vision is the branch of Machine learning that does the magic and deep learning helps in achieving it. In this session, I will cover an introduction to Computer Vision, Deep Neural Networks and show how to build a serverless image classification application using Microsoft Azure Functions and ML.Net framework. The implementation will be in C# language.
 
