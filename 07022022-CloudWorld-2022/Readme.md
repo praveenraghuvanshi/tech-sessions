@@ -19,7 +19,7 @@
 **Resources**
 
 - [Deck](CloudWorld-2022-Serverless-DNN.pdf)
-- [Source Code](src\ServerlessDNN)
+- [Source Code](src/ServerlessDNN)
 - [Tutorial](https://dev.to/praveenraghuvanshi/end-to-end-serverless-deep-neural-network-with-azure-functions-and-ml-net-505a)
 - MobileNet ONNX file : [Latest](https://github.com/onnx/models/tree/master/vision/classification/mobilenet/model) Or [Used in tutorial](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/27102021-AI-Dev-World-2021/assets/mobilenetv2-7.onnx)
 
