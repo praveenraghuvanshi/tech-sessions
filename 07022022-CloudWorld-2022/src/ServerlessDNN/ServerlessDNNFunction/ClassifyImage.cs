@@ -22,7 +22,7 @@ namespace ServelessDNNFunction
     public static class ClassifyImage
     {
         [FunctionName("ClassifyImage")]
-        public static async Task<IActionResult> Run(
+        public static Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -85,7 +85,7 @@ namespace ServelessDNNFunction
             // STEP-5: Return Predicted value as a response to Function API
             var label = ClassIdToLabel(maxScore);
             string responseMessage = $"Predicted: {maxScore}\nLabel: {label}";
-            return new OkObjectResult(responseMessage);
+            return Task.FromResult(new OkObjectResult(responseMessage) as IActionResult);
             #endregion
         }
 
