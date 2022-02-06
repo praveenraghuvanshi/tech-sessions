@@ -28,10 +28,10 @@
 
 **Resources**
 
-- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/16062021-Global-AI-Community-2021)
-- [Deck](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/cricket-analytics.pdf)
-- [Notebook](https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/CricketAnalysis.ipynb)
-- [Source](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/16062021-Global-AI-Community-2021/src/SportAnalytics)
+- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/08022022-Developer-Week-2022)
+- [Deck](cricket-analytics.pdf)
+- [Notebook](CricketAnalysis.ipynb)
+- [Source](src/SportAnalytics)
 
 Contact
 
