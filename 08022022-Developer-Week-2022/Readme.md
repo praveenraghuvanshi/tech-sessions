@@ -39,7 +39,9 @@ Contact
 Twitter : @praveenraghuvan\
 LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi \
 Github : https://github.com/praveenraghuvanshi \
-dev.to : https://dev.to/praveenraghuvanshi
+dev.to : https://dev.to/praveenraghuvanshi \
+Website: https://www.praveenraghuvanshi.com \
+Email: contact@praveenraghuvanshi.com 
 
 I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
