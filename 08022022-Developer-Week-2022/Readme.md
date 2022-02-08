@@ -32,6 +32,7 @@
 - [Deck](cricket-analytics.pdf)
 - [Notebook](CricketAnalysis.ipynb)
 - [Source](src/SportAnalytics)
+- [Tutorial]([Cricket Analysis and Prediction using ML.Net(C#) - DEV Community 👩‍💻👨‍💻](https://dev.to/praveenraghuvanshi/cricket-analysis-and-prediction-using-mlnetc-56od))
 
 Contact
 
