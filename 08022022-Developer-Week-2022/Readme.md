@@ -58,7 +58,7 @@ I am running an unofficial **telegram** group for ML.Net enthusiasts, please fee
 
 ### Jupyter Notebook
 
-Link: https://github.com/praveenraghuvanshi/tech-sessions/blob/master/16062021-Global-AI-Community-2021/CricketAnalysis.ipynb
+Link: https://github.com/praveenraghuvanshi/tech-sessions/blob/master/08022022-Developer-Week-2022/CricketAnalysis.ipynb
 
 <img src="assets\metrics-prediction.png" alt="metrics-prediction" style="zoom:80%;" />
 
