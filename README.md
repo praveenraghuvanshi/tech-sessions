@@ -28,7 +28,7 @@ A repository of Technical sessions delivered
 
 | S.No | Date         | Topic                                                        | Type    | Framework/Language         | Source                                                       |
 | ---- | ------------ | ------------------------------------------------------------ | ------- | -------------------------- | ------------------------------------------------------------ |
-| 1    | 09-Feb-2022 | [Cricket Analysis and Prediction using ML.Net(C#)](https://dev.to/praveenraghuvanshi/microsoft-az-900-certification-a-3-week-plan-3j2l) | Article | ML.Net(C#)                   | [Cricket Analysis and Prediction using ML.Net(C#)](https://dev.to/praveenraghuvanshi/microsoft-az-900-certification-a-3-week-plan-3j2l) |
+| 1    | 09-Feb-2022 | [Cricket Analysis and Prediction using ML.Net(C#)](https://dev.to/praveenraghuvanshi/cricket-analysis-and-prediction-using-mlnetc-56od) | Article | ML.Net(C#)                   | [Cricket Analysis and Prediction using ML.Net(C#)](https://dev.to/praveenraghuvanshi/cricket-analysis-and-prediction-using-mlnetc-56od) |
 | 2    | 05-March-2020 | [Microsoft AZ-900 Certification: A 3 week Plan](https://dev.to/praveenraghuvanshi/microsoft-az-900-certification-a-3-week-plan-3j2l) | Article | Certification/Azure                   | [Microsoft AZ-900 Certification: A 3 week Plan](https://dev.to/praveenraghuvanshi/microsoft-az-900-certification-a-3-week-plan-3j2l) |
 | 3    |        10-Sep2020      | [End-to-End Serverless Deep Neural Network with Azure Functions and ML.Net](https://dev.to/praveenraghuvanshi/end-to-end-serverless-deep-neural-network-with-azure-functions-and-ml-net-505a) | Article | ML.Net(C#)/Azure Functions |  [Dev.to](https://dev.to/praveenraghuvanshi/end-to-end-serverless-deep-neural-network-with-azure-functions-and-ml-net-505a) |
 | 4    | 19-July-2020 | [Composite Design Pattern: An agile story](https://github.com/praveenraghuvanshi/design-patterns/tree/master/02-Structural/02-04-composite) | Article | C#                         | [Dev.to](https://dev.to/praveenraghuvanshi/composite-design-pattern-an-agile-story-g6j) |
@@ -37,3 +37,13 @@ A repository of Technical sessions delivered
 | 7    | 07-June-2020 | [COVID-19 EDA and Prediction using .Net Dataframe and ML.Net (C#) - Exploratory Data Analysis](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-exploratory-data-analysis-1jdd) | Article | DataFrame(C#)              | [Dev.to](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-exploratory-data-analysis-1jdd) |
 | 8    | 07-June-2020 | [COVID-19 EDA and Prediction using .Net Dataframe and ML.Net (C#) - Prediction](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-prediction-4cf0) | Article | ML.Net(C#)                 | [Dev.to](https://dev.to/praveenraghuvanshi/covid-19-eda-and-prediction-using-net-dataframe-and-ml-net-c-prediction-4cf0) |
 
+Contact
+
+Twitter : @praveenraghuvan \
+LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi \
+Github : https://github.com/praveenraghuvanshi \
+dev.to : https://dev.to/praveenraghuvanshi \
+Website: https://www.praveenraghuvanshi.com \
+Email: contact@praveenraghuvanshi.com 
+
+I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
