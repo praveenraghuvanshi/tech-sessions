@@ -15,7 +15,7 @@
 **Resources**
 
 - [Repo](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/14042022-Practical-ML-Net-Sound-Classification)
-- [Deck](sould-classification.pdf)
+- [Deck](SoundClassification-PracticalML.NetUG.pdf)
 - [Sound Classifiction with ML.Net Repo](https://github.com/praveenraghuvanshi/sound-classification-mlnet)
 - [ML.Net Notebook](https://github.com/praveenraghuvanshi/sound-classification-mlnet/blob/main/SoundClassification.ipynb)
 - [ML.Net Source Code](https://github.com/praveenraghuvanshi/sound-classification-mlnet/tree/main/src/SoundClassificationMLNet)
