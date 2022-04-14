@@ -14,10 +14,15 @@
 
 **Resources**
 
-- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/14042022-Practical-ML-Net-Sound-Classification)
+- [Repo](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/14042022-Practical-ML-Net-Sound-Classification)
 - [Deck](sould-classification.pdf)
-- [Notebook](SoundClassification.ipynb)
-- [Source](src/SoundClassification)
+- [Sound Classifiction with ML.Net Repo](https://github.com/praveenraghuvanshi/sound-classification-mlnet)
+- [ML.Net Notebook](https://github.com/praveenraghuvanshi/sound-classification-mlnet/blob/main/SoundClassification.ipynb)
+- [ML.Net Source Code](https://github.com/praveenraghuvanshi/sound-classification-mlnet/tree/main/src/SoundClassificationMLNet)
+- [Sound Classification with Pytorch Repo](https://github.com/praveenraghuvanshi/sound-classification-pytorch)
+- [Pytorch Notebook](https://github.com/praveenraghuvanshi/sound-classification-pytorch/blob/main/Sound_Classification.ipynb)
+- [ONNX Model - 26.3 MB](https://github.com/praveenraghuvanshi/sound-classification-pytorch/blob/main/SoundClassifier.onnx)
+- [GTZAN Dataset - Music Genre Classification](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification?resource=download)
 
 Contact
 
@@ -31,6 +36,4 @@ Email: contact@praveenraghuvanshi.com
 I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
 
-
-## Results
 
