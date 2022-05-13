@@ -35,7 +35,7 @@ dev.to : https://dev.to/praveenraghuvanshi \
 Website: https://www.praveenraghuvanshi.com \
 Email: contact@praveenraghuvanshi.com 
 
-<img src="assets\telegram-logo.png" style="zoom:20%;" />
+<img src="assets\telegram-logo.png" style="zoom:80%;" />
 
 I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
