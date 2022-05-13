@@ -20,7 +20,7 @@
 
 **Resources**
 
-- [Github](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/13052022-AI-ML-Bangalore-Meetup)
+- [Github](https://bit.ly/3MdUs0G)
 - [Deck](cricket-analytics.pdf)
 - [Notebook](CricketAnalysis.ipynb)
 - [Source](src/SportAnalytics)
