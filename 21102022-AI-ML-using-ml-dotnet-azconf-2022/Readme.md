@@ -20,7 +20,7 @@ Data Science and Machine learning are not only for python and R developers. If y
 
 - [Deck](Cricket/Praveen_Raghuvanshi_AI_ML_Microsoft_DotNet_Cricket.pdf)
 - [Cricket Analysis and Prediction using ML.Net(C#) - DEV Community 👩‍💻👨‍💻](https://dev.to/praveenraghuvanshi/cricket-analysis-and-prediction-using-mlnetc-56od)
-- [Notebook](https://github.com/praveenraghuvanshi/covid-19/tree/master)
+- [Notebook](Cricket/CricketAnalysis.ipynb)
 
 Contact
 
