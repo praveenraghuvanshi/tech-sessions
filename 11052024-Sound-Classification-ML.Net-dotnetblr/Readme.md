@@ -2,11 +2,11 @@
 
 **Title** : Sound Classification using ML.Net
 
-**Date** : 14-April-2022
+**Date** : 11-May-2024
 
-**Event**: [Meetup - Practical ML.NET User Group](https://www.meetup.com/practical-ml-net-user-group/)
+**Event**: [DotNet Bangalore Meetup #25](https://www.meetup.com/dotnetblr/events/299729859/)
 
-**Type**: Virtual
+**Type**: In-Person
 
 **Youtube URL:** To be published
 
@@ -28,8 +28,8 @@
 
 **Resources**
 
-- [Repo](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/14042022-Practical-ML-Net-Sound-Classification)
-- [Deck](SoundClassification-PracticalML.NetUG.pdf)
+- [Repo](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/11052024-Sound-Classification-ML.Net-dotnetblr)
+- [Deck](SoundClassification-dotnetblr.pdf)
 - [Sound Classifiction with ML.Net Repo](https://github.com/praveenraghuvanshi/sound-classification-mlnet)
 - [ML.Net Notebook](https://github.com/praveenraghuvanshi/sound-classification-mlnet/blob/main/SoundClassification.ipynb)
 - [ML.Net Source Code](https://github.com/praveenraghuvanshi/sound-classification-mlnet/tree/main/src/SoundClassificationMLNet)
@@ -45,7 +45,6 @@ LinkedIn : https://in.linkedin.com/in/praveenraghuvanshi \
 Github : https://github.com/praveenraghuvanshi \
 dev.to : https://dev.to/praveenraghuvanshi \
 Website: https://www.praveenraghuvanshi.com \
-Email: contact@praveenraghuvanshi.com 
 
 I am running an unofficial **telegram** group for ML.Net enthusiasts, please feel free to join it at https://t.me/joinchat/IifUJQ_PuYT757Turx-nLg
 
