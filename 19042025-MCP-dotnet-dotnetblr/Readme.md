@@ -15,8 +15,7 @@
 **Resources**
 
 - [Repo](https://github.com/praveenraghuvanshi/tech-sessions/tree/master/19042025-MCP-dotnet-dotnetblr)
-- [Deck](SoundClassification-PracticalML.NetUG.pdf)
-- 
+- [Deck](Intro to Model Context Protocol(MCP).pdf) 
 
 Contact
 
